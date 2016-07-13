@@ -3,15 +3,11 @@ import argparse
 import rootpy
 import array
 from rootpy.io import root_open
-from rootpy.plotting.style import set_style
-from templates import RatioPlot
-from rootpy.plotting import Canvas, Hist
+from rootpy.plotting import Hist
 from prettytable import PrettyTable
 log = rootpy.log 
 log = log['comparator']
 
-
-set_style('ATLAS', shape='rect')
 
 categories = {
     'vbf_highdr_loose': {
@@ -44,13 +40,6 @@ samples = {
 }
 
 
-def compare_plot(h1, h2):
-    plot = RatioPlot()
-    plot.draw('main', [h1, h2])
-    #     r = h1.Clone()
-    #     r /= h2
-    #     plot.draw('ratio', r)
-    return plot
 
 def h_others(file, cat, h_name='nominal'):
     htop = file[cat + '/Top/' + h_name]
@@ -173,4 +162,3 @@ if __name__ == '__main__':
 
 
     print tab
-#     plot = compare_plot(h1, h2)

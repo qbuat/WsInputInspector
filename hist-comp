@@ -1,0 +1,108 @@
+#!/usr/bin/env python
+from rootpy.plotting import Canvas, Hist, Legend
+from rootpy.plotting.style import set_style
+from rootpy.io import root_open
+import rootpy
+log = rootpy.log 
+log = log['hist-comp']
+
+
+from tools import CATEGORIES_15, CATEGORIES_16, SAMPLES
+
+def ratio_plot(file1, file2, sample, cat1=None, cat2=None):
+    hlist1 = []
+    hlist2 = []
+    for c1, c2 in zip(CATEGORIES_16, CATEGORIES_15):
+        h1 = sample.hist(file1, c1)
+        h2 = sample.hist(file2, c2)
+        h1.Sumw2()
+        h2.Sumw2()
+        hlist1.append(h1)
+        hlist2.append(h2)
+
+    sum_h1 = hlist1[0].Clone()
+    for h in hlist1[1:]:
+        sum_h1 += h
+
+    sum_h2 = hlist2[0].Clone()
+    for h in hlist2[1:]:
+        sum_h2 += h
+
+    sum_h1 = h1.Rebin(3)
+    sum_h2 = h2.Rebin(3)
+    r = sum_h2.Clone()
+    r /= sum_h1
+    r.title = sample.title
+    r.color = sample.color
+    r.xaxis.title = h1.xaxis.title
+    r.linewidth = 2
+    r.legendstyle = 'l'
+    r.yaxis.title = '2015 / 2016'
+    return r
+
+
+if __name__ == '__main__':
+
+    from argparse import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_argument('file1')
+    parser.add_argument('file2')
+    parser.add_argument('--label1', default='2016')
+    parser.add_argument('--label2', default='2015')
+    args = parser.parse_args()
+
+    rfile1 = root_open(args.file1)
+    rfile2 = root_open(args.file2)
+
+    rootpy.ROOT.gROOT.SetBatch(True)
+    set_style('ATLAS', shape='rect')
+#     for cat1, cat2 in zip(CATEGORIES_16, CATEGORIES_15):
+#         ratios = []
+#         for s in SAMPLES:
+#             log.info(s.name)
+#             ratio = ratio_plot(rfile1, rfile2, cat1, cat2, s)
+#             ratios.append(ratio)
+
+#         c = Canvas()
+#         htemp = ratios[0].Clone()
+#         htemp.Reset()
+#         htemp.yaxis.SetRangeUser(0, 10)
+#         htemp.Draw('HIST')
+#         for r in ratios:
+#             r.Draw('SAMEHIST][')
+#         c.SaveAs('blurp_{0}.png'.format(cat1.replace('hh16_', '')))
+
+    ratios = []
+    for s in SAMPLES:
+        log.info(s.name)
+        ratio = ratio_plot(rfile1, rfile2, s)
+        ratios.append(ratio)
+        
+    c = Canvas()
+    htemp = ratios[0].Clone()
+    htemp.Reset()
+    htemp.color = 'black'
+    htemp.yaxis.SetRangeUser(0, 2)
+    htemp.Draw('HIST')
+    for r in ratios:
+        r.Draw('SAMEHISTE1')
+    c.RedrawAxis()
+    leg = Legend(ratios, pad=c, textsize=20)
+    leg.Draw('same')
+    text = rootpy.ROOT.TLatex(
+        c.GetLeftMargin() + 0.01,
+        1 - c.GetTopMargin() - 0.1,
+        'Stacking of #tau_{had}#tau_{had} SR (VBF + Boosted)')
+    text.SetNDC(True)
+    text.SetTextSize(20)
+
+    text_l = rootpy.ROOT.TLatex(
+        c.GetLeftMargin() + 0.01,
+        1 - c.GetTopMargin() - 0.2,
+        '2015 lumi: 3.2 fb^{-1}, 2016 lumi: 5.1 fb^{-1}')
+    text_l.SetNDC(True)
+    text_l.SetTextSize(20)
+    text.Draw()
+    text_l.Draw()
+    c.SaveAs('blurp.png')
+

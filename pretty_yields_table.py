@@ -6,7 +6,7 @@ log.setLevel(logging.INFO)
 
 
 from tools import PrettyYield
-from tools import CATEGORIES, SAMPLES, SIGNAL_SAMPLES, OTHER_SAMPLES
+from tools import CATEGORIES, SAMPLES_NAME, SIGNAL_SAMPLES, OTHER_SAMPLES
 
 
 LINE = """
