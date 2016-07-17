@@ -4,6 +4,80 @@ logging.basicConfig()
 log = logging.getLogger('yields')
 log.setLevel(logging.INFO)
 
+
+
+LINE = """
+{0} & {1} & {2} & {3} & {4} &  \multicolumn{{3}}{{c|}}{{ {5} }} & {6}\\\\
+& & & & & {7} & {8} & {9} & \\\\
+"""
+def latex_line(data, ztt, fakes, top, ewk, diboson, signal, sel='Preselection'):
+    y_data = PrettyYield(data)
+    y_ztt = PrettyYield(ztt)
+    y_fakes = PrettyYield(fakes)
+    y_top = PrettyYield(top)
+    y_ewk = PrettyYield(ewk)
+    y_diboson = PrettyYield(diboson)
+    y_signal = PrettyYield(signal)
+    y_others = PrettyYield(top + ewk + diboson)
+    y_bkg = PrettyYield(ztt + fakes + top + ewk + diboson)
+    return LINE.format(
+        sel.replace('_', '\_'),
+        str(y_data),
+        str(y_bkg),
+        str(y_ztt),
+        str(y_fakes),
+        str(y_others),
+        str(y_signal),
+        str(y_top),
+        str(y_ewk),
+        str(y_diboson))
+
+def pretty_yield_line(
+    data,
+    ztautau, 
+    fakes,
+    ztautau_err=None, fakes_err=None,
+    others=None, others_err=None,
+    diboson=None, diboson_err=None,
+    top=None, top_err=None,
+    ewk=None, ewk_err=None,
+    total_bkg=None, total_bkg_err=None,
+    signal=None,
+    name='Preselection'):
+
+
+    if others is None or top is None or ewk is None or diboson is None:
+        log.warning('Can not perform Others background closure test')
+
+    if others is None:
+        if top is None or ewk is None or diboson is None:
+            log.error('Can not compute Others background')
+            raise RuntimeError 
+
+        else:
+            log.info('will compute Others from the individual components')
+            others = ewk + top + diboson
+    else:
+        others_alt = ewk + top + diboson
+        rel_dif = (others - others_alt) / others * 100.
+        if abs(rel_dif) > 1e-2:
+            log.warning('Non closure for Others of {0}%'.format(rel_dif))
+
+
+    if total_bkg is None:
+        log.warning('Can not perform total bakground closure test')
+        log.info('Will compute the total background from the idnividual components')
+    else:
+        total_bkg_alt = ztautau + fakes + others
+        rel_dif = (total_bkg - total_bkg_alt) / total_bkg * 100.
+        log.info(rel_dif)
+        if abs(rel_dif) > 1e-2:
+            log.warning('Non closure for Total Background of {0}%'.format(rel_dif))
+
+    return latex_line(
+        data, ztautau, fakes, top, ewk, diboson, signal, sel=name)
+
+
 class PrettyYield(object):
 
     def __init__(self, nominal, stat_uncert=None, syst_uncert=None):

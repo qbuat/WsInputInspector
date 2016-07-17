@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+
+import logging;
+import os
+logging.basicConfig()
+log = logging.getLogger(os.path.basename(__file__))
+log.setLevel(logging.INFO)
+
+
+from tools.yields import latex_line, pretty_yield_line
+from tools import (CATEGORIES_15, CATEGORIES_16, 
+                   SAMPLES_NAMES, SIGNAL_SAMPLES, OTHER_SAMPLES)
+
+
+if __name__ == '__main__':
+    
+    import argparse
+    from rootpy.io import root_open
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file1')
+    args = parser.parse_args()
+
+
+    rfile = root_open(args.file1, 'read')
+    lines = []
+
+    if '15' in args.file1:
+        CATEGORIES = CATEGORIES_15
+    else:
+        CATEGORIES = CATEGORIES_16
+
+    for cat in CATEGORIES:
+        log.info(cat)
+        
+        line = pretty_yield_line(
+            int(rfile['{0}/Data/nominal'.format(cat)].integral(overflow=True)),
+            (rfile['{0}/Ztt/nominal'.format(cat)] + rfile['{0}/Zttewk/nominal'.format(cat)]).integral(overflow=True),
+            rfile['{0}/Fake/nominal'.format(cat)].integral(overflow=True),
+            diboson=rfile['{0}/VV/nominal'.format(cat)].integral(overflow=True),
+            top=rfile['{0}/Top/nominal'.format(cat)].integral(overflow=True),
+            ewk=(rfile['{0}/W/nominal'.format(cat)] + rfile['{0}/Zll/nominal'.format(cat)]).integral(overflow=True),
+            signal=(
+                rfile['{0}/VBFH/nominal'.format(cat)] +
+                rfile['{0}/ggH/nominal'.format(cat)] +
+                rfile['{0}/ZH/nominal'.format(cat)] +
+                rfile['{0}/WH/nominal'.format(cat)] +
+                rfile['{0}/ttH/nominal'.format(cat)]).integral(overflow=True),
+            name=cat)
+        lines.append(line)
+
+
+    for line in lines:
+        print line
+        print '\hline'

@@ -8,7 +8,6 @@ class Sample(object):
         self._name = name
         self._color = color
         self._title = title
-        print sub_samples
         self._sub_samples = sub_samples
     
     @property
@@ -30,7 +29,6 @@ class Sample(object):
                 return rfile['{0}/{1}/{2}'.format(
                         cat, self.name, hist_name)]
             except:
-                print cat, self.name
                 raise ValueError('wrong name 1')
 
         else:
@@ -40,7 +38,6 @@ class Sample(object):
                     h = rfile['{0}/{1}/{2}'.format(
                             cat, s, hist_name)]
                 except:
-                    print cat, s
                     raise ValueError('wrong name 2')
                 hlist.append(h)
             sum_hist = hlist[0]
