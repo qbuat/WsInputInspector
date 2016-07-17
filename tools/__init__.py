@@ -2,6 +2,8 @@ from .yields import PrettyYield
 from .sample import Sample
 
 CATEGORIES_15 = [
+    'hh15_QCD_fit',
+    'hh15_preselection',
     'hh15_vbf_lowdr',
     'hh15_vbf_highdr_tight',
     'hh15_vbf_highdr_loose',
@@ -9,6 +11,8 @@ CATEGORIES_15 = [
     'hh15_boost_loose',
 ]
 CATEGORIES_16 = [
+    'hh16_QCD_fit',
+    'hh16_preselection',
     'hh16_vbf_lowdr',
     'hh16_vbf_highdr_tight',
     'hh16_vbf_highdr_loose',

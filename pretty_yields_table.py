@@ -6,7 +6,7 @@ log.setLevel(logging.INFO)
 
 
 from tools import PrettyYield
-from tools import CATEGORIES, SAMPLES_NAME, SIGNAL_SAMPLES, OTHER_SAMPLES
+from tools import CATEGORIES_15, CATEGORIES_16, SAMPLES_NAMES, SIGNAL_SAMPLES, OTHER_SAMPLES
 
 
 LINE = """
@@ -24,7 +24,7 @@ def latex_line(data, ztt, fakes, top, ewk, diboson, signal, sel='Preselection'):
     y_others = PrettyYield(top + ewk + diboson)
     y_bkg = PrettyYield(ztt + fakes + top + ewk + diboson)
     return LINE.format(
-        sel,
+        sel.replace('_', '\_'),
         str(y_data),
         str(y_bkg),
         str(y_ztt),
@@ -113,140 +113,132 @@ def pretty_yield_line(
     return latex_line(
         data, ztautau, fakes, top, ewk, diboson, signal, sel=name)
 
-#     return latex_line.format(
-#         data, total_bkg, total_bkg_err, 
-#         ztautau, ztautau_err, fakes, fakes_err,
-#         others, others_err,
-#         top, top_err,
-#         ewk, ewk_err,
-#         diboson, diboson_err,
-#         signal, name)
+# Cut &            $Fake$  & $Top$ & $W$   & $Zll$ & $Dib$ & $Ztt   $ & $Ztt$ &$VBFH$ & $ggH$ & $ttH$ & $WH$  & $ZH $ & $Data  $ &$TotBG$& $OBG$ \\
+#   hh15\_QCD\_fit &886.07 & 43.62 & 72.74 &  0.00 &  7.77 &  1213.19 & 16.73 &  5.43 & 16.63 &  0.18 &  1.46 &  0.43 &  2251.00 &2240.1 & 124.1 \\
+# line_presel_nodeta = pretty_yield_line(
+#     3498, # data
+#     1538.42, #ztt
+#     1829.19, #fakes
+#     diboson=12.70,
+#     top=51.01,
+#     ewk=68.02 + 0.45,
+#     total_bkg=3499.8,
+#     signal=6.49 + 22.32 + 0.29 + 1.36 + 0.75, 
+#     name='Presel. (no deta)')
 
-
-line_presel_nodeta = pretty_yield_line(
-    3498, # data
-    1538.42, #ztt
-    1829.19, #fakes
-    diboson=12.70,
-    top=51.01,
-    ewk=68.02 + 0.45,
-    total_bkg=3499.8,
-    signal=6.49 + 22.32 + 0.29 + 1.36 + 0.75, 
-    name='Presel. (no deta)')
-
-line_presel = pretty_yield_line(
-    3219, #data
-    1519.79, #ztt
-    1564.62, #fakes
-    diboson=12.43, 
-    top=45.14,
-    ewk=59.68 + 0.45,
-    total_bkg=3202.1, # bkg
-    signal=6.19 + 21.41 + 0.27 + 1.36 + 0.71,
-    name='Preselection')
+# line_presel = pretty_yield_line(
+#     3219, #data
+#     1519.79, #ztt
+#     1564.62, #fakes
+#     diboson=12.43, 
+#     top=45.14,
+#     ewk=59.68 + 0.45,
+#     total_bkg=3202.1, # bkg
+#     signal=6.19 + 21.41 + 0.27 + 1.36 + 0.71,
+#     name='Preselection')
     
-line_rest = pretty_yield_line(
-    1440, #data
-    514.90, #ztt,
-    907.23, #fakes
-    diboson=2.97,
-    top=8.67,
-    ewk=18.56 + 0.45,
-    total_bkg=1452.8,
-    signal=0.89 + 7.22 + 0.02 + 0.00 + 0.15,
-    name='rest')
+# line_rest = pretty_yield_line(
+#     1440, #data
+#     514.90, #ztt,
+#     907.23, #fakes
+#     diboson=2.97,
+#     top=8.67,
+#     ewk=18.56 + 0.45,
+#     total_bkg=1452.8,
+#     signal=0.89 + 7.22 + 0.02 + 0.00 + 0.15,
+#     name='rest')
 
-line_vbf = pretty_yield_line(
-    438, #data,
-    211.82, #ztt
-    174.67, #fakes
-    diboson=1.55,
-    top=8.97,
-    ewk=8.59 + 0.00,
-    total_bkg=405.6,
-    signal=3.45 + 3.44 + 0.04 + 0.03 + 0.05,
-    name='MVA VBF')
+# line_vbf = pretty_yield_line(
+#     438, #data,
+#     211.82, #ztt
+#     174.67, #fakes
+#     diboson=1.55,
+#     top=8.97,
+#     ewk=8.59 + 0.00,
+#     total_bkg=405.6,
+#     signal=3.45 + 3.44 + 0.04 + 0.03 + 0.05,
+#     name='MVA VBF')
 
-line_boost = pretty_yield_line(
-    1341, #data
-    793.08, #ztt
-    482.72, #fakes
-    diboson=7.90,
-    top=27.50,
-    ewk=32.54 + 0.00,
-    signal=1.85 + 10.75 + 0.21 + 1.33 + 0.52,
-    name='MVA Boost')
+# line_boost = pretty_yield_line(
+#     1341, #data
+#     793.08, #ztt
+#     482.72, #fakes
+#     diboson=7.90,
+#     top=27.50,
+#     ewk=32.54 + 0.00,
+#     signal=1.85 + 10.75 + 0.21 + 1.33 + 0.52,
+#     name='MVA Boost')
 
-line_vbf_lowdr = pretty_yield_line(
-    65, # data,
-    49.75, # ztt
-    8.84, # fake
-    diboson=0.46,
-    top=1.11,
-    ewk=1.83 + 0.00,
-    signal=1.63 + 1.28 + 0.01 + 0.03 + 0.01,
-    name='VBF low dR')
+# line_vbf_lowdr = pretty_yield_line(
+#     65, # data,
+#     49.75, # ztt
+#     8.84, # fake
+#     diboson=0.46,
+#     top=1.11,
+#     ewk=1.83 + 0.00,
+#     signal=1.63 + 1.28 + 0.01 + 0.03 + 0.01,
+#     name='VBF low dR')
 
-line_vbf_highdr_tight = pretty_yield_line(
-    71, # data
-    29.38, # ztt
-    42.75, #fake
-    diboson=0.30,
-    top=1.51,
-    ewk=0.94 + 0.00,
-    signal=1.25 + 0.56 + 0.00 + 0.00 + 0.00,
-    name='VBF high dR tight')
+# line_vbf_highdr_tight = pretty_yield_line(
+#     71, # data
+#     29.38, # ztt
+#     42.75, #fake
+#     diboson=0.30,
+#     top=1.51,
+#     ewk=0.94 + 0.00,
+#     signal=1.25 + 0.56 + 0.00 + 0.00 + 0.00,
+#     name='VBF high dR tight')
 
-line_vbf_highdr_loose = pretty_yield_line(
-    144, #data
-    59.99, # ztt
-    60.43, # fake
-    diboson=0.34,
-    top=1.86,
-    ewk=3.76 + 0.00,
-    signal=0.49 + 0.66 + 0.00 + 0.00 + 0.01,
-    name='VBF high dR loose')
+# line_vbf_highdr_loose = pretty_yield_line(
+#     144, #data
+#     59.99, # ztt
+#     60.43, # fake
+#     diboson=0.34,
+#     top=1.86,
+#     ewk=3.76 + 0.00,
+#     signal=0.49 + 0.66 + 0.00 + 0.00 + 0.01,
+#     name='VBF high dR loose')
 
-line_boost_tight = pretty_yield_line(
-    472,#data
-    390.02, # ztt
-    68.54, # Fake
-    diboson=4.19,
-    top=5.90,
-    ewk=7.74 + 0.00,
-    signal=0.92+ 5.23 + 0.15 + 0.55 + 0.29,
-    name='Boost Tight')
+# line_boost_tight = pretty_yield_line(
+#     472,#data
+#     390.02, # ztt
+#     68.54, # Fake
+#     diboson=4.19,
+#     top=5.90,
+#     ewk=7.74 + 0.00,
+#     signal=0.92+ 5.23 + 0.15 + 0.55 + 0.29,
+#     name='Boost Tight')
     
-line_boost_loose = pretty_yield_line(
-    800, # data
-    394.69, # ztt
-    333.12, #fake
-    diboson=3.53,
-    top=21.51,
-    ewk=23.28 + 0.00,
-    signal=0.89 + 5.78 + 0.08 + 0.78 + 0.21,
-    name='Boost Loose')
+# line_boost_loose = pretty_yield_line(
+#     800, # data
+#     394.69, # ztt
+#     333.12, #fake
+#     diboson=3.53,
+#     top=21.51,
+#     ewk=23.28 + 0.00,
+#     signal=0.89 + 5.78 + 0.08 + 0.78 + 0.21,
+#     name='Boost Loose')
 
-print line_presel_nodeta
-print '\hline'
-print line_presel
-print '\hline'
-print line_rest
-print '\hline'
-print line_vbf
-print '\hline'
-print line_vbf_lowdr
-print '\hline'
-print line_vbf_highdr_tight
-print '\hline'
-print line_vbf_highdr_loose
-print '\hline'
-print line_boost
-print '\hline'
-print line_boost_tight
-print '\hline'
-print line_boost_loose
-print '\hline'
+# print line_presel_nodeta
+# print '\hline'
+# print line_presel
+# print '\hline'
+# print line_rest
+# print '\hline'
+# print line_vbf
+# print '\hline'
+# print line_vbf_lowdr
+# print '\hline'
+# print line_vbf_highdr_tight
+# print '\hline'
+# print line_vbf_highdr_loose
+# print '\hline'
+# print line_boost
+# print '\hline'
+# print line_boost_tight
+# print '\hline'
+# print line_boost_loose
+# print '\hline'
 
 # print line_presel
 
@@ -263,22 +255,28 @@ if __name__ == '__main__':
 
     rfile = root_open(args.file1, 'read')
     lines = []
+
+    if '15' in args.file1:
+        CATEGORIES = CATEGORIES_15
+    else:
+        CATEGORIES = CATEGORIES_16
+
     for cat in CATEGORIES:
         log.info(cat)
         
         line = pretty_yield_line(
-            int(rfile['{0}/Data/nominal'.format(cat)].Integral()),
-            rfile['{0}/Ztt/nominal'.format(cat)].Integral(),
-            rfile['{0}/Fake/nominal'.format(cat)].Integral(),
-            diboson=rfile['{0}/VV/nominal'.format(cat)].Integral(),
-            top=rfile['{0}/Top/nominal'.format(cat)].Integral(),
-            ewk=(rfile['{0}/W/nominal'.format(cat)] + rfile['{0}/Zll/nominal'.format(cat)]).Integral(),
+            int(rfile['{0}/Data/nominal'.format(cat)].integral(overflow=True)),
+            (rfile['{0}/Ztt/nominal'.format(cat)] + rfile['{0}/Zttewk/nominal'.format(cat)]).integral(overflow=True),
+            rfile['{0}/Fake/nominal'.format(cat)].integral(overflow=True),
+            diboson=rfile['{0}/VV/nominal'.format(cat)].integral(overflow=True),
+            top=rfile['{0}/Top/nominal'.format(cat)].integral(overflow=True),
+            ewk=(rfile['{0}/W/nominal'.format(cat)] + rfile['{0}/Zll/nominal'.format(cat)]).integral(overflow=True),
             signal=(
                 rfile['{0}/VBFH/nominal'.format(cat)] +
                 rfile['{0}/ggH/nominal'.format(cat)] +
                 rfile['{0}/ZH/nominal'.format(cat)] +
                 rfile['{0}/WH/nominal'.format(cat)] +
-                rfile['{0}/ttH/nominal'.format(cat)]).Integral(),
+                rfile['{0}/ttH/nominal'.format(cat)]).integral(overflow=True),
             name=cat)
         lines.append(line)
 

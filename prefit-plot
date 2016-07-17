@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+import os
+import ROOT
+from rootpy.io import root_open
+import rootpy
+log = rootpy.log 
+log = log['prefit-plot']
+
+
+
+from tools.fancy import *
+from tools.sample import Sample
+
+if __name__ == '__main__':
+
+    from argparse import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_argument('file')
+
+    args = parser.parse_args()
+
+    rfile = root_open(args.file)
+    sys_l, sys_h = syst_uncert_builder(rfile)
+
+    print sys_l
+    print sys_h
+
+
+    TotalBkg = Sample('TotalBkg', 'red', 'Total Background',
+                      sub_samples=['Ztt', 'Zttewk', 'Top', 'W', 'Zll', 'VV'])
+
+    hists_low = []
+    for var in sys_l:
+        print var
+        hists_low.append(TotalBkg.hist(
+                rfile, 'hh16_boost_tight', var))
+
+    hists_high = []
+    for var in sys_h:
+        print var
+        hists_high.append(TotalBkg.hist(
+                rfile, 'hh16_boost_tight', var))
+
+    hnom = TotalBkg.hist(rfile, 'hh16_boost_tight', 'nominal')
+    low, high = syst_envelop(hnom, hists_low, hists_high)
+    env_low, env_high = envelop(hnom, low, high)

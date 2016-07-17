@@ -45,7 +45,7 @@ class PrettyYield(object):
     def __str__(self):
         if self.stat_uncert == None:
             if self.syst_uncert == None:
-                return str(self.nominal)
+                return '{0:1.2f}'.format(self.nominal)
             elif isinstance(self.syst_uncert, (list, tuple)):
                 return '{0:1.2f} \pm X.XX ^{+{1:1.2f}}_{-{2:1.2f}}'.format(
                     self.nominal,

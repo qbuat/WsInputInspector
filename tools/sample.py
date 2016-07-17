@@ -1,3 +1,7 @@
+import rootpy
+log = rootpy.log
+log = log['sample']
+
 class Sample(object):
 
     def __init__(self, name, color, title, sub_samples=None):
@@ -19,11 +23,12 @@ class Sample(object):
     def title(self):
         return self._title
 
-    def hist(self, rfile, cat):
+    def hist_one_cat(self, rfile, cat, hist_name):
+
         if self._sub_samples is None:
             try:
-                return rfile['{0}/{1}/nominal'.format(
-                        cat, self.name)]
+                return rfile['{0}/{1}/{2}'.format(
+                        cat, self.name, hist_name)]
             except:
                 print cat, self.name
                 raise ValueError('wrong name 1')
@@ -32,8 +37,8 @@ class Sample(object):
             hlist = []
             for s in self._sub_samples:
                 try:
-                    h = rfile['{0}/{1}/nominal'.format(
-                            cat, s)]
+                    h = rfile['{0}/{1}/{2}'.format(
+                            cat, s, hist_name)]
                 except:
                     print cat, s
                     raise ValueError('wrong name 2')
@@ -42,3 +47,18 @@ class Sample(object):
             for h in hlist[1:]:
                 sum_hist += h
             return sum_hist
+
+    def hist(self, rfile, cat, name='nominal'):
+        if isinstance(cat, str):
+            return self.hist_one_cat(rfile, cat, name)
+        elif isinstance(cat, (list, tuple)):
+            hlist = []
+            for c in cat:
+                h = self.hist_one_cat(rfile, c, name)
+                hlist.append(h)
+
+            sum_hist = hlist[0]
+            for h in hlist[1:]:
+                sum_hist += h
+            return sum_hist
+
