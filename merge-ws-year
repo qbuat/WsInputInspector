@@ -1,0 +1,83 @@
+#!/usr/bin/env python
+import os
+import shutil
+import ROOT
+import itertools
+from rootpy.io import root_open
+import rootpy
+log = rootpy.log 
+log = log['prefit-plot']
+
+def intersect(a, b):
+    return list(set(a) & set(b))
+
+
+if __name__ == '__main__':
+   
+   log.info('start')
+   from argparse import ArgumentParser
+   parser = ArgumentParser()
+   parser.add_argument('file1')
+   parser.add_argument('file2')
+   parser.add_argument('--merge-prefix', default='merge')
+
+   args = parser.parse_args()
+   
+   rfile_15 = root_open(args.file1)
+   rfile_16 = root_open(args.file2)
+
+   from tools import CATEGORIES_15, CATEGORIES_16, CATEGORIES_MERGED, SAMPLES_NAMES
+
+
+
+
+   rfile_merged = root_open('merge.root', 'recreate')
+   for cat in CATEGORIES_MERGED:
+      rfile_merged.mkdir(cat)
+      for sample in SAMPLES_NAMES + ['Data']:
+         rfile_merged.mkdir('{0}/{1}'.format(
+               cat, sample),)
+
+   for cat_15, cat_16, cat_merged in zip(CATEGORIES_15, CATEGORIES_16, CATEGORIES_MERGED):
+      for sample in SAMPLES_NAMES + ['Data']:
+         rfile_merged.cd('{0}/{1}'.format(cat_merged, sample))
+         print 100 * '-'
+         unpack_15 = [objs for _, _, objs in rfile_15['{0}/{1}'.format(cat_15, sample)].walk()]
+         if len(unpack_15) != 1:
+            log.error('weird')
+         unpack_16 = [objs for _, _, objs in rfile_16['{0}/{1}'.format(cat_16, sample)].walk()]
+         if len(unpack_16) != 1:
+            log.error('weird')
+
+         objs_15 = unpack_15[0]
+         objs_16 = unpack_16[0]
+
+         common = intersect(objs_15, objs_16)
+         for obj in common:
+            print obj, '\t', obj
+            h_15 = rfile_15['{0}/{1}/{2}'.format(cat_15, sample, obj)]
+            h_16 = rfile_16['{0}/{1}/{2}'.format(cat_16, sample, obj)]
+            h_merged = h_15 + h_16
+            h_merged.name = h_15.name
+            h_merged.Write()
+
+         for obj in objs_15:
+            if not obj in common:
+               print obj, '\t --' 
+               h_15 = rfile_15['{0}/{1}/{2}'.format(cat_15, sample, obj)]
+               h_16 = rfile_16['{0}/{1}/nominal'.format(cat_16, sample)]
+               h_merged = h_15 + h_16
+               h_merged.name = h_15.name
+               h_merged.Write()
+
+         for obj in objs_16:
+            if not obj in common:
+               print obj, '\t --' 
+               h_15 = rfile_15['{0}/{1}/nominal'.format(cat_15, sample)]
+               h_16 = rfile_16['{0}/{1}/{2}'.format(cat_16, sample, obj)]
+               h_merged = h_15 + h_16
+               h_merged.name = h_16.name
+               h_merged.Write()
+
+         
+

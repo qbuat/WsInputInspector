@@ -20,6 +20,16 @@ CATEGORIES_16 = [
     'hh16_boost_loose',
 ]
 
+CATEGORIES_MERGED = [
+    'hh_QCD_fit',
+    'hh_preselection',
+    'hh_vbf_lowdr',
+    'hh_vbf_highdr_tight',
+    'hh_vbf_highdr_loose',
+    'hh_boost_tight',
+    'hh_boost_loose',
+]
+
 
 SAMPLES_NAMES = [
     'VBFH', 'ggH', 'ZH', 'WH', 'ttH',
