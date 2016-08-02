@@ -2,8 +2,8 @@ from .yields import PrettyYield
 from .sample import Sample
 
 CATEGORIES_15 = [
-    'hh15_QCD_fit',
-    'hh15_preselection',
+#     'hh15_QCD_fit',
+#     'hh15_preselection',
     'hh15_vbf_lowdr',
     'hh15_vbf_highdr_tight',
     'hh15_vbf_highdr_loose',
@@ -11,8 +11,8 @@ CATEGORIES_15 = [
     'hh15_boost_loose',
 ]
 CATEGORIES_16 = [
-    'hh16_QCD_fit',
-    'hh16_preselection',
+#     'hh16_QCD_fit',
+#     'hh16_preselection',
     'hh16_vbf_lowdr',
     'hh16_vbf_highdr_tight',
     'hh16_vbf_highdr_loose',
@@ -21,19 +21,19 @@ CATEGORIES_16 = [
 ]
 
 CATEGORIES_MERGED = [
-    'hh_QCD_fit',
-    'hh_preselection',
-    'hh_vbf_lowdr',
-    'hh_vbf_highdr_tight',
-    'hh_vbf_highdr_loose',
-    'hh_boost_tight',
-    'hh_boost_loose',
+#     'hhAll_QCD_fit',
+#     'hhAll_preselection',
+    'hhAll_vbf_lowdr',
+    'hhAll_vbf_highdr_tight',
+    'hhAll_vbf_highdr_loose',
+    'hhAll_boost_tight',
+    'hhAll_boost_loose',
 ]
 
 
 SAMPLES_NAMES = [
     'VBFH', 'ggH', 'ZH', 'WH', 'ttH',
-    'Ztt', 
+    'Ztt', 'Zttewk', 'ZttSh',
     'Fake',
     'Top', 'W', 'Zll', 'VV'
 ]

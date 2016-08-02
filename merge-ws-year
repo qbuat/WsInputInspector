@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
 
 
-
+   # Make the skeleton of the merged file
    rfile_merged = root_open('merge.root', 'recreate')
    for cat in CATEGORIES_MERGED:
       rfile_merged.mkdir(cat)
@@ -39,6 +39,13 @@ if __name__ == '__main__':
                cat, sample),)
 
    for cat_15, cat_16, cat_merged in zip(CATEGORIES_15, CATEGORIES_16, CATEGORIES_MERGED):
+      lumi_15 = rfile_15['{0}/lumiininvpb'.format(cat_15)]
+      lumi_16 = rfile_16['{0}/lumiininvpb'.format(cat_16)]
+      lumi_merged = lumi_15 + lumi_16
+      lumi_merged.name = lumi_15.name
+      rfile_merged.cd(cat_merged)
+      lumi_merged.Write()
+
       for sample in SAMPLES_NAMES + ['Data']:
          rfile_merged.cd('{0}/{1}'.format(cat_merged, sample))
          print 100 * '-'
@@ -72,7 +79,7 @@ if __name__ == '__main__':
 
          for obj in objs_16:
             if not obj in common:
-               print obj, '\t --' 
+               print '-- \t', obj 
                h_15 = rfile_15['{0}/{1}/nominal'.format(cat_15, sample)]
                h_16 = rfile_16['{0}/{1}/{2}'.format(cat_16, sample, obj)]
                h_merged = h_15 + h_16
