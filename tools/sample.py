@@ -1,6 +1,18 @@
 import rootpy
+import math
 log = rootpy.log
 log = log['sample']
+
+
+def sys_envelop(nom, sys_list):
+    err = 0
+    if nom == 0:
+        return err
+    for s in sys_list:
+        err_s = (s - nom) / nom
+        err = math.sqrt(err * err + err_s * err_s)
+    return err * nom
+
 
 class Sample(object):
 
@@ -9,7 +21,31 @@ class Sample(object):
         self._color = color
         self._title = title
         self._sub_samples = sub_samples
-    
+
+
+    def systematics(self, cat, rfile):
+
+        _sys_high = []
+        _sys_low = []
+        if self._sub_samples is None:
+            for h in rfile['{0}/{1}'.format(
+                cat, self.name)]:
+                if 'high' in h.name:
+                    _sys_high.append(h.name)
+                if 'low' in h.name:
+                    _sys_low.append(h.name)
+        else:
+            for samp in self._sub_samples:
+                for h in rfile['{0}/{1}'.format(
+                        cat, samp)]:
+                    if 'high' in h.name and h.name not in _sys_high:
+                        _sys_high.append(h.name)
+                    if 'low' in h.name and h.name not in _sys_low:
+                        _sys_low.append(h.name)
+
+
+        return [_sys_high, _sys_low]
+
     @property
     def name(self):
         return self._name
@@ -58,4 +94,29 @@ class Sample(object):
             for h in hlist[1:]:
                 sum_hist += h
             return sum_hist
+
+    def yields(self, rfile, cat, name='nominal'):
+        return self.hist(rfile, cat, name).integral(
+            overflow=True, error=True)
+
+    def yields_systs(self, rfile, cat, sym=True):
+        nom, _ = self.yields(rfile, cat)
+        yields_high, yields_low = [], []
+        systs_high, systs_low = self.systematics(cat, rfile)
+        for s in systs_high:
+            y, _ = self.yields(rfile, cat, name=s)
+            yields_high.append(y)
+        for s in systs_low:
+            y, _ = self.yields(rfile, cat, name=s)
+            yields_low.append(y)
+        
+        _high, _low = sys_envelop(nom, yields_high), sys_envelop(nom, yields_low)
+        if sym == True:
+            sys = max(_high, _low)
+            if sys != 0:
+                return sys
+            else:
+                return None
+        else:
+            return _high, _low
 

@@ -7,7 +7,8 @@ log = logging.getLogger(os.path.basename(__file__))
 log.setLevel(logging.INFO)
 
 
-from tools.yields import latex_line, pretty_yield_line
+from tools.yields import latex_line, pretty_yield_line, signal_latex_line
+from tools.sample import Sample
 from tools import (CATEGORIES_15, CATEGORIES_16, 
                    SAMPLES_NAMES, SIGNAL_SAMPLES, OTHER_SAMPLES)
 
@@ -24,7 +25,9 @@ if __name__ == '__main__':
 
     rfile = root_open(args.file1, 'read')
     lines = []
+    lines_with_errors = []
 
+    signal_lines = []
     if '15' in args.file1:
         CATEGORIES = CATEGORIES_15
     else:
@@ -33,23 +36,79 @@ if __name__ == '__main__':
     for cat in CATEGORIES:
         log.info(cat)
         
+        Data = Sample('Data', 'black', 'Data')
+        data, _ = Data.yields(rfile, cat)
+        data = int(data)
+
+        Ztt = Sample('Ztt', 'blue', 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'Zttewk'])
+        ztt, ztt_err = Ztt.yields(rfile, cat)
+        ztt_err_syst = Ztt.yields_systs(rfile, cat)
+        
+
+        Fake = Sample('Fake', 'green', 'Fake')
+        fake, fake_err = Fake.yields(rfile, cat)
+        fake_err_syst = Fake.yields_systs(rfile, cat)
+
+        Diboson = Sample('VV', 'black', 'VV')
+        diboson, diboson_err = Diboson.yields(rfile, cat)
+        diboson_err_syst = Diboson.yields_systs(rfile, cat)
+
+        Top = Sample('Top', 'black', 'Top')
+        top, top_err = Top.yields(rfile, cat)
+        top_err_syst = Top.yields_systs(rfile, cat)
+        
+        Ewk = Sample('ewk', 'black', 'ewk', sub_samples=['W', 'Zll'])
+        ewk, ewk_err = Ewk.yields(rfile, cat)
+        ewk_err_syst = Ewk.yields_systs(rfile, cat)
+        
+
         line = pretty_yield_line(
-            int(rfile['{0}/Data/nominal'.format(cat)].integral(overflow=True)),
-            (rfile['{0}/Ztt/nominal'.format(cat)] + rfile['{0}/Zttewk/nominal'.format(cat)]).integral(overflow=True),
-            rfile['{0}/Fake/nominal'.format(cat)].integral(overflow=True),
-            diboson=rfile['{0}/VV/nominal'.format(cat)].integral(overflow=True),
-            top=rfile['{0}/Top/nominal'.format(cat)].integral(overflow=True),
-            ewk=(rfile['{0}/W/nominal'.format(cat)] + rfile['{0}/Zll/nominal'.format(cat)]).integral(overflow=True),
-            signal=(
-                rfile['{0}/VBFH/nominal'.format(cat)] +
-                rfile['{0}/ggH/nominal'.format(cat)] +
-                rfile['{0}/ZH/nominal'.format(cat)] +
-                rfile['{0}/WH/nominal'.format(cat)] +
-                rfile['{0}/ttH/nominal'.format(cat)]).integral(overflow=True),
-            name=cat)
+            data, ztt, fake, diboson=diboson, top=top, ewk=ewk, name=cat)
         lines.append(line)
+        
+        line_err = pretty_yield_line(
+            data, ztt, fake, diboson=diboson, top=top, ewk=ewk, 
+            ztautau_err=ztt_err, fakes_err=fake_err, top_err=top_err, ewk_err=ewk_err, diboson_err=diboson_err,
+            ztautau_err_syst=ztt_err_syst, fakes_err_syst=fake_err_syst, top_err_syst=top_err_syst, ewk_err_syst=ewk_err_syst, diboson_err_syst=diboson_err_syst,
+            name=cat)
+        lines_with_errors.append(line_err)
+
+        signal_line = signal_latex_line(
+            rfile['{0}/ggH/nominal'.format(cat)].integral(overflow=True),
+            rfile['{0}/VBFH/nominal'.format(cat)].integral(overflow=True),
+            rfile['{0}/WH/nominal'.format(cat)].integral(overflow=True),
+            rfile['{0}/ZH/nominal'.format(cat)].integral(overflow=True),
+            rfile['{0}/ttH/nominal'.format(cat)].integral(overflow=True),
+            sel=cat)
+        signal_lines.append(signal_line)
+
+        Ztt = Sample('Ztt', 'blue', 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'Zttewk'])
+        print Ztt.yields(rfile, cat)
+        print Ztt.yields_systs(rfile, cat)
 
 
+    log.info(20 * '=')
+    log.info(10 * 'BACKGROUND ')
+    print 100 * '-'
     for line in lines:
         print line
         print '\hline'
+    print 100 * '-'
+
+    log.info(20 * '=')
+    log.info(10 * 'SIGNAL ')
+    print 100 * '-'
+    for line in signal_lines:
+        print line
+        print '\hline'
+    print 100 * '-'
+
+    log.info(20 * '=')
+    log.info('BACKGROUND WITH ERRORS ')
+    print 100 * '-'
+    for line in lines_with_errors:
+        print line
+        print '\hline'
+    print 100 * '-'
+
+

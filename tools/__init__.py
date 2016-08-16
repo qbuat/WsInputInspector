@@ -3,19 +3,23 @@ from .sample import Sample
 
 CATEGORIES_15 = [
 #     'hh15_QCD_fit',
-#     'hh15_preselection',
+    'hh15_preselection',
+    'hh15_CBA_vbf',
     'hh15_vbf_lowdr',
     'hh15_vbf_highdr_tight',
     'hh15_vbf_highdr_loose',
+    'hh15_CBA_boost',
     'hh15_boost_tight',
     'hh15_boost_loose',
 ]
 CATEGORIES_16 = [
 #     'hh16_QCD_fit',
-#     'hh16_preselection',
+    'hh16_preselection',
+    'hh16_CBA_vbf',
     'hh16_vbf_lowdr',
     'hh16_vbf_highdr_tight',
     'hh16_vbf_highdr_loose',
+    'hh16_CBA_boost',
     'hh16_boost_tight',
     'hh16_boost_loose',
 ]
