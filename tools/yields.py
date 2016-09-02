@@ -68,8 +68,8 @@ def pretty_yield_line(
     name='Preselection'):
 
 
-    if others is None or top is None or ewk is None or diboson is None:
-        log.warning('Can not perform Others background closure test')
+#     if others is None or top is None or ewk is None or diboson is None:
+#         log.warning('Can not perform Others background closure test')
 
     if others is None:
         if top is None or ewk is None or diboson is None:
@@ -88,7 +88,7 @@ def pretty_yield_line(
 
     if total_bkg is None:
         log.warning('Can not perform total bakground closure test')
-        log.info('Will compute the total background from the idnividual components')
+        log.info('Will compute the total background from the individual components')
     else:
         total_bkg_alt = ztautau + fakes + others
         rel_dif = (total_bkg - total_bkg_alt) / total_bkg * 100.
@@ -110,10 +110,10 @@ class PrettyYield(object):
 
         # stat uncert
         if stat_uncert is None:
-            log.warning('No stat uncert')
+#             log.warning('No stat uncert')
             self.stat_uncert = None
         elif isinstance(stat_uncert, (float, int)):
-            log.info('symmetric stat uncer')
+#             log.info('symmetric stat uncer')
             self.stat_uncert = stat_uncert
         elif isinstance(stat_uncert, (list, tuple)):
             if len(stat_uncert) != 2:
@@ -127,10 +127,10 @@ class PrettyYield(object):
 
         # syst uncert
         if syst_uncert is None:
-            log.warning('No syst uncert')
+#             log.warning('No syst uncert')
             self.syst_uncert = None
         elif isinstance(syst_uncert, (float, int)):
-            log.info('symmetric syst uncer')
+#             log.info('symmetric syst uncer')
             self.syst_uncert = syst_uncert
         elif isinstance(syst_uncert, (list, tuple)):
             if len(syst_uncert) != 2:

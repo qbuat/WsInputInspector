@@ -22,6 +22,10 @@ class Sample(object):
         self._title = title
         self._sub_samples = sub_samples
 
+    def __str__(self):
+        return '{0}: {1}'.format(type(self), self.name) 
+    
+
 
     def systematics(self, cat, rfile):
 
@@ -76,7 +80,7 @@ class Sample(object):
                 except:
                     raise ValueError('wrong name 2')
                 hlist.append(h)
-            sum_hist = hlist[0]
+            sum_hist = hlist[0].Clone()
             for h in hlist[1:]:
                 sum_hist += h
             return sum_hist
@@ -90,7 +94,7 @@ class Sample(object):
                 h = self.hist_one_cat(rfile, c, name)
                 hlist.append(h)
 
-            sum_hist = hlist[0]
+            sum_hist = hlist[0].Clone()
             for h in hlist[1:]:
                 sum_hist += h
             return sum_hist

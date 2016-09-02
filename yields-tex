@@ -9,7 +9,7 @@ log.setLevel(logging.INFO)
 
 from tools.yields import latex_line, pretty_yield_line, signal_latex_line
 from tools.sample import Sample
-from tools import (CATEGORIES_15, CATEGORIES_16, 
+from tools import (CATEGORIES_15, CATEGORIES_16, CATEGORIES_MERGED,
                    SAMPLES_NAMES, SIGNAL_SAMPLES, OTHER_SAMPLES)
 
 
@@ -28,10 +28,12 @@ if __name__ == '__main__':
     lines_with_errors = []
 
     signal_lines = []
-    if '15' in args.file1:
+    if 'hh15' in args.file1:
         CATEGORIES = CATEGORIES_15
-    else:
+    elif 'hh16' in args.file1:
         CATEGORIES = CATEGORIES_16
+    else:
+        CATEGORIES = CATEGORIES_MERGED
 
     for cat in CATEGORIES:
         log.info(cat)
@@ -83,8 +85,6 @@ if __name__ == '__main__':
         signal_lines.append(signal_line)
 
         Ztt = Sample('Ztt', 'blue', 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'Zttewk'])
-        print Ztt.yields(rfile, cat)
-        print Ztt.yields_systs(rfile, cat)
 
 
     log.info(20 * '=')
