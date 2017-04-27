@@ -77,9 +77,9 @@ class Sample(object):
                 try:
                     h = rfile['{0}/{1}/{2}'.format(
                             cat, s, hist_name)]
+                    hlist.append(h)
                 except:
-                    raise ValueError('wrong name 2')
-                hlist.append(h)
+                    print Warning('wrong name : {0}, {1}, {2}'.format(cat, s, hist_name))
             sum_hist = hlist[0].Clone()
             for h in hlist[1:]:
                 sum_hist += h

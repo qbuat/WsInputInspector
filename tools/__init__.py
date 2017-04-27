@@ -26,12 +26,12 @@ CATEGORIES_16 = [
 
 CATEGORIES_MERGED = [
 #     'hhAll_QCD_fit',
-    'hhAll_preselection',
-    'hhAll_CBA_vbf',
+#     'hhAll_preselection',
+#     'hhAll_CBA_vbf',
     'hhAll_vbf_lowdr',
     'hhAll_vbf_highdr_tight',
     'hhAll_vbf_highdr_loose',
-    'hhAll_CBA_boost',
+#     'hhAll_CBA_boost',
     'hhAll_boost_tight',
     'hhAll_boost_loose',
 ]

@@ -81,11 +81,11 @@ if __name__ == '__main__':
     plt.figure(3)
     significance_chart(rfile, Higgs, Bkg, cats)
 
-#     sys_high, sys_low = Ztt.systematics(cat, rfile)    
-#     systs = sys_high + sys_low
-#     for isys, sys in enumerate(systs):
-#         plt.figure(3 + isys + 1)
-#         log.info(sys)
-#         syst_yields_chart(rfile, Ztt, sys, cats)
+    sys_high, sys_low = Ztt.systematics(cat, rfile)    
+    systs = sys_high + sys_low
+    for isys, sys in enumerate(systs):
+        plt.figure(3 + isys + 1)
+        log.info(sys)
+        syst_yields_chart(rfile, Ztt, sys, cats)
 
     plt.show()
