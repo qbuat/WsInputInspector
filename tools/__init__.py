@@ -1,5 +1,10 @@
+import rootpy
+log = rootpy.log
+log = log['tools']
+
 from .yields import PrettyYield
 from .sample import Sample
+
 
 CATEGORIES_15 = [
 #     'hh15_QCD_fit',
@@ -28,18 +33,18 @@ CATEGORIES_MERGED = [
 #     'hhAll_QCD_fit',
 #     'hhAll_preselection',
 #     'hhAll_CBA_vbf',
-    'hhAll_vbf_lowdr',
-    'hhAll_vbf_highdr_tight',
-    'hhAll_vbf_highdr_loose',
+    'hhAll_cba_vbf_lowdr_signal',
+    'hhAll_cba_vbf_highdr_tight_signal',
+    'hhAll_cba_vbf_highdr_loose_signal',
 #     'hhAll_CBA_boost',
-    'hhAll_boost_tight',
-    'hhAll_boost_loose',
+    'hhAll_cba_boost_tight_signal',
+    'hhAll_cba_boost_loose_signal',
 ]
 
 
 SAMPLES_NAMES = [
     'VBFH', 'ggH', 'ZH', 'WH', 'ttH',
-    'Ztt', 'Zttewk', 'ZttSh',
+    'Ztt', 'ZttEWK', 'ZttSh',
     'Fake',
     'Top', 'W', 'Zll', 'VV'
 ]

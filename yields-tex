@@ -42,7 +42,7 @@ if __name__ == '__main__':
         data, _ = Data.yields(rfile, cat)
         data = int(data)
 
-        Ztt = Sample('Ztt', 'blue', 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'Zttewk'])
+        Ztt = Sample('Ztt', 'blue', 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
         ztt, ztt_err = Ztt.yields(rfile, cat)
         ztt_err_syst = Ztt.yields_systs(rfile, cat)
         
@@ -84,7 +84,7 @@ if __name__ == '__main__':
             sel=cat)
         signal_lines.append(signal_line)
 
-        Ztt = Sample('Ztt', 'blue', 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'Zttewk'])
+        Ztt = Sample('Ztt', 'blue', 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
 
 
     log.info(20 * '=')

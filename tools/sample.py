@@ -1,7 +1,5 @@
-import rootpy
+from . import log; log = log[__name__]
 import math
-log = rootpy.log
-log = log['sample']
 
 
 def sys_envelop(nom, sys_list):
@@ -79,7 +77,7 @@ class Sample(object):
                             cat, s, hist_name)]
                     hlist.append(h)
                 except:
-                    print Warning('wrong name : {0}, {1}, {2}'.format(cat, s, hist_name))
+                    print Warning('wrong name: {0}, {1}, {2}'.format(cat, s, hist_name))
             sum_hist = hlist[0].Clone()
             for h in hlist[1:]:
                 sum_hist += h

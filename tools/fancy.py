@@ -91,9 +91,11 @@ def quadratic_sum(bands):
         envel.SetPoint(i, bands[0].x(i), bands[0].y(i))
         import numpy as np
         yerr_l_list = np.array([b.yerrl(i) for b in bands])
+        yerr_l_list = [ a * a for a in yerr_l_list]
         yerr_l = np.sqrt(np.sum(yerr_l_list))
 
         yerr_h_list = np.array([b.yerrh(i) for b in bands])
+        yerr_h_list = [ a * a for a in yerr_h_list]
         yerr_h = np.sqrt(np.sum(yerr_h_list))
 
         envel.SetPointError(i, bands[0].xerrl(i), bands[0].xerrh(i), yerr_l, yerr_h)
