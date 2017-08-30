@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+
+import logging;
+import os
+logging.basicConfig()
+log = logging.getLogger(os.path.basename(__file__))
+log.setLevel(logging.INFO)
+
+import ROOT
+from rootpy.plotting import set_style, Canvas, Hist, Legend
+set_style('ATLAS', shape='rect')
+
+from tools.sample import Sample
+from tools.fancy import syst_envelop, envelop
+from tools import CATEGORIES_MERGED
+
+def frac_plot(hnom, band, sub_bands, col_bands, cat):
+    c = Canvas()
+    h = Hist(10, 40, 200)
+    for b in h:
+        b.value = 1
+    h.yaxis.SetRangeUser(0.2, 1.8)
+    h.xaxis.title = h_nom.xaxis.title
+    h.yaxis.title = 'Fractional Uncertainty'
+
+    cat_label = ROOT.TText(100, 1.7, 'Category: ' + cat)
+    cat_label.SetTextSize(18)
+    h.Draw('HIST')
+    band.color = 'red'
+    band.fillstyle = 'solid'
+    band.linewidth = 2
+    band.legendstyle = 'f'
+    band.Draw('sameE2')
+    band.title = '#oplus {0}'.format(hists_low[-1].name).replace('_low', '')
+    for ib, b in enumerate(sub_bands):
+    #print 'boo'
+        b.fillcolor = col_bands[ib]
+        b.fillstyle = 'solid'
+        b.legendstyle = 'f'
+        b.title = '{0}'.format(hists_low[len(hists_low) - 2 - ib].name.replace('_low', ''))
+        print b.title
+        if ib != len(sub_bands) - 1:
+            b.title = '#oplus ' + b.title
+        b.Draw('sameE2')
+    h.Draw('same')
+    cat_label.Draw()
+    leg = Legend(
+        sub_bands[::-1] + [band], pad=c, 
+        textsize=18, rightmargin=0.5, leftmargin=0., topmargin=0, margin=0.2, entryheight=0.04)
+    leg.SetNColumns(1)
+    leg.Draw()
+    c.RedrawAxis()
+    return c
+
+
+if __name__ == '__main__':
+    
+    import argparse
+    from rootpy.io import root_open
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file1')
+    args = parser.parse_args()
+
+
+    rfile = root_open(args.file1, 'read')
+
+    cat = 'hhAll_cba_boost_loose_signal'
+    Fake = Sample('Fake', 'grey', 'Fake')
+
+    for cat in CATEGORIES_MERGED:
+        systs = Fake.systematics(cat, rfile)
+        h_nom = Fake.hist(rfile, cat)
+        syst_fake_high = sorted(filter(lambda t: ('fake' in t or 'dPhi' in t) and 'extrap' not in t, systs[0]))
+        syst_fake_low  = sorted(filter(lambda t: ('fake' in t or 'dPhi' in t) and 'extrap' not in t, systs[1]))
+        syst_fake_high = syst_fake_high[::-1]
+        syst_fake_low  = syst_fake_low[::-1]
+
+        hists_high = []
+        for s in syst_fake_high:
+            h = Fake.hist(rfile, cat, name=s)
+            hists_high.append(h)
+        print hists_high
+
+        hists_low = []
+        for s in syst_fake_low:
+            h = Fake.hist(rfile, cat, name=s)
+            hists_low.append(h)
+        print hists_low
+
+        band = envelop(h_nom, hists_low, hists_high)
+        band_1 = envelop(h_nom, hists_low[:3], hists_high[:3]) # all but fake_extrap and fake_conta
+        band_2 = envelop(h_nom, hists_low[:2], hists_high[:2]) # all but fake_extrap, fake_cont, dPhiWeightSys
+        band_3 = envelop(h_nom, hists_low[:1], hists_high[:1]) # all but fake_extra, fake_cont, dPhiWeigtSys, dPhiWeightStat
+        sub_bands = [band_1, band_2, band_3]
+        col_bands = ['blue', 'green', 'purple']
+
+        c = frac_plot(h_nom, band, sub_bands, col_bands, cat)
+        c.SaveAs('plots/fractional_fake_uncert_{0}.pdf'.format(cat))
