@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+
+import logging;
+import os
+logging.basicConfig()
+log = logging.getLogger(os.path.basename(__file__))
+log.setLevel(logging.INFO)
+
+import ROOT
+from rootpy.plotting import set_style, Canvas, Hist, Legend
+set_style('ATLAS', shape='rect')
+
+from tools.sample import Sample
+from tools.fancy import syst_envelop, envelop
+from tools import CATEGORIES_MERGED
+from tools.plotting import raw_np_plot
+
+ROOT.gROOT.SetBatch(True)
+
+
+if __name__ == '__main__':
+    
+    import argparse
+    from rootpy.io import root_open
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file1')
+    args = parser.parse_args()
+
+
+    rfile = root_open(args.file1, 'read')
+
+#     sample = Sample('Ztt', 'blue', 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
+
+
+    Higgs = Sample('Higgs', 'red', 'H#rightarrow#tau#tau', sub_samples=['ggH', 'VBFH', 'WH', 'ZH', 'ttH'])
+    ztt = Sample('Ztt', 'blue', 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
+    Fake = Sample('Fake', 'green', 'Fake')
+    samples = [Higgs, ztt, Fake]
+        
+
+    
+    out = root_open('./plots/np.root', 'recreate')
+    for cat in CATEGORIES_MERGED:
+        log.info(cat)
+        out.mkdir(cat)
+        out.cd(cat)
+        for sample in samples:
+            log.info(sample.name)
+            out.mkdir('{}/{}'.format(cat, sample.name))
+            out.cd('{}/{}'.format(cat, sample.name))
+            systs = sample.syst_dict(cat, rfile)
+
+            for k, s in systs.items():
+                log.info('{} \t {} \t {}'.format(k, s['high'], s['low']))
+                c = raw_np_plot(rfile, k, cat, sample)
+                c.name = k
+                c.title = k
+                c.SaveAs('./plots/np_plot_{0}_{1}_{2}.pdf'.format(k, cat, sample.name))
+                c.Write()
+
+    out.Close()
+

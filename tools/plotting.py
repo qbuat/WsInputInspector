@@ -4,7 +4,8 @@ import numpy as np
 
 #     set_style('ATLAS', mpl=True)
 
-
+from rootpy.plotting import Canvas
+import ROOT
 
 
 def yields_chart(rfile, samples, Data, cat):
@@ -99,3 +100,110 @@ def syst_yields_chart(rfile, sample, syst, cats):
     plt.title(syst)
 #     plt.savefig('figures/{0}.png'.format(syst))
 #     plt.close()
+
+
+def raw_np_plot(rfile, syst, cat, sample):
+    h_nom  = sample.hist(rfile, cat)
+    systs = sample.syst_dict(cat, rfile)
+
+    c = Canvas()
+    c.SetRightMargin(0.1)
+
+
+
+    h_template = h_nom.Clone()
+    h_template /= h_nom
+    h_template.fillstyle = '//'
+    h_template.fillcolor = 'black'
+    h_template.markersize = 0.
+    h_template.yaxis.SetRangeUser(0.5, 1.5)
+    h_template.xaxis.title = h_nom.xaxis.title
+    h_template.yaxis.title = 'Fractional Uncertainty'
+    h_template.name = 'Stat_Uncert'
+    h_template.title = 'Stat Uncert.'
+    h_template.legendstyle = 'f'
+    h_template.Draw('E2')
+
+    if systs[syst]['high'] != '':
+        do_high = True
+        h_high = sample.hist(rfile, cat, systs[syst]['high'])
+        h_high_r = h_high.Clone()
+        h_high_r /= h_nom
+        h_high_r.linewidth = 2
+        h_high_r.color = 'red'
+        h_high_r.name = 'high'
+        h_high_r.title = 'high'
+        h_high_r.legendstyle = 'f'
+        h_high_r.Draw('SAMEHIST')
+    else:
+        do_high = False
+
+        
+    if systs[syst]['low'] != '':
+        do_low = True
+        h_low  = sample.hist(rfile, cat, systs[syst]['low']) 
+        h_low_r = h_low.Clone()
+        h_low_r /= h_nom
+        h_low_r.linewidth = 2
+        h_low_r.color = 'blue'
+        h_low_r.name = 'low'
+        h_low_r.title = 'low'
+        h_low_r.legendstyle = 'f'
+        h_low_r.Draw('SAMEHIST')
+    else:
+        do_low = False
+
+    ROOT.gPad.SetTicks(0, 0)
+    max_hist =  1.2 * h_nom.GetBinContent(h_nom.GetMaximumBin())
+    right_axis = ROOT.TGaxis(
+        ROOT.gPad.GetUxmax(), ROOT.gPad.GetUymin(),
+        ROOT.gPad.GetUxmax(), ROOT.gPad.GetUymax(), 
+        0, max_hist, 510,"+L")
+    right_axis.SetLineColor(ROOT.kViolet)
+    right_axis.SetLabelColor(ROOT.kViolet)
+    right_axis.SetTextColor(ROOT.kViolet)
+    right_axis.SetTitle('')
+    right_axis.Draw('same')
+
+    h_nom_draw = h_nom.Clone()
+    h_nom_draw *= (ROOT.gPad.GetUymax() - ROOT.gPad.GetUymin()) / max_hist
+    for b in h_nom_draw:
+        b.value += ROOT.gPad.GetUymin()
+    h_nom_draw.color = 'purple'
+    h_nom_draw.markersize = 0.1 * h_nom_draw.markersize
+    h_nom_draw.name = 'Nominal'
+    h_nom_draw.title = 'Nominal'
+    h_nom_draw.legendstyle = 'lep'
+    h_nom_draw.Draw('sameE')
+
+    syst_label = ROOT.TText(c.GetLeftMargin() + 0.03, 1 - c.GetTopMargin() - 0.04, 'NP: ' + syst)
+    syst_label.SetNDC(True)
+    syst_label.SetTextSize(20)
+    syst_label.Draw('same')
+
+    cat_label = ROOT.TText(c.GetLeftMargin() + 0.03, 1 - c.GetTopMargin() - 0.08, 'Cat.: ' + cat)
+    cat_label.SetNDC(True)
+    cat_label.SetTextSize(20)
+    cat_label.Draw('same')
+
+    samp_label = ROOT.TLatex(
+        c.GetLeftMargin() + 0.03, 1 - c.GetTopMargin() - 0.12, 
+        'Samp.: ' + sample.title)
+    samp_label.SetNDC(True)
+    samp_label.SetTextSize(20)
+    samp_label.Draw('same')
+
+    leg = ROOT.TLegend(
+        0.7, 0.75, 1 - c.GetRightMargin(), 1 - c.GetTopMargin())
+    leg.AddEntry(h_nom_draw, 'Nominal', 'lep')
+    leg.AddEntry(h_template, 'Stat. Uncert.', 'f')
+    if do_high:
+        leg.AddEntry(h_high_r, 'High', 'l')
+    if do_low:
+        leg.AddEntry(h_low_r, 'Low', 'l')
+    leg.SetTextSize(18)
+    leg.SetFillStyle(0)
+    leg.Draw()
+    c.RedrawAxis()
+    c.Update()
+    return c

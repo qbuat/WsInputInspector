@@ -32,21 +32,50 @@ class Sample(object):
         if self._sub_samples is None:
             for h in rfile['{0}/{1}'.format(
                 cat, self.name)]:
-                if 'high' in h.name:
+                if h.name.endswith('_high'):
                     _sys_high.append(h.name)
-                if 'low' in h.name:
+                if h.name.endswith('_low'):
                     _sys_low.append(h.name)
         else:
             for samp in self._sub_samples:
                 for h in rfile['{0}/{1}'.format(
                         cat, samp)]:
-                    if 'high' in h.name and h.name not in _sys_high:
+                    if h.name.endswith('_high') and h.name not in _sys_high:
                         _sys_high.append(h.name)
-                    if 'low' in h.name and h.name not in _sys_low:
+                    if h.name.endswith('_low') and h.name not in _sys_low:
                         _sys_low.append(h.name)
 
 
         return [_sys_high, _sys_low]
+
+    def syst_dict(self, cat, rfile):
+        sys_high, sys_low = self.systematics(cat, rfile)
+        dictionary = {}
+        for high in sys_high:
+            key = high[:-5]
+
+            low = key + '_low'
+            if not low in sys_low:
+                low = ''
+
+            if not key in dictionary.keys():
+                dictionary[key] = {'high': high, 'low': low}
+
+        for low in sys_low:
+            key = low[:-4]
+
+            if key in dictionary.keys():
+                continue
+
+            high = key + '_high'
+            if not low in sys_low:
+                high = ''
+
+            dictionary[key] = {'high': high, 'low': low}
+        return dictionary
+            
+
+
 
     @property
     def name(self):
@@ -77,7 +106,7 @@ class Sample(object):
                             cat, s, hist_name)]
                     hlist.append(h)
                 except:
-                    print Warning('wrong name: {0}, {1}, {2}'.format(cat, s, hist_name))
+                    print Warning('\t wrong name: {0}, {1}, {2}'.format(cat, s, hist_name))
             sum_hist = hlist[0].Clone()
             for h in hlist[1:]:
                 sum_hist += h

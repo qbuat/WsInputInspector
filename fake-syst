@@ -97,3 +97,4 @@ if __name__ == '__main__':
 
         c = frac_plot(h_nom, band, sub_bands, col_bands, cat)
         c.SaveAs('plots/fractional_fake_uncert_{0}.pdf'.format(cat))
+        c.SaveAs('plots/fractional_fake_uncert_{0}.eps'.format(cat))
