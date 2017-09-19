@@ -42,22 +42,75 @@ if __name__ == '__main__':
     
     out = root_open('./plots/np.root', 'recreate')
     for cat in CATEGORIES_MERGED:
-        log.info(cat)
         out.mkdir(cat)
         out.cd(cat)
         for sample in samples:
-            log.info(sample.name)
             out.mkdir('{}/{}'.format(cat, sample.name))
-            out.cd('{}/{}'.format(cat, sample.name))
-            systs = sample.syst_dict(cat, rfile)
 
-            for k, s in systs.items():
-                log.info('{} \t {} \t {}'.format(k, s['high'], s['low']))
+            systs = sample.syst_dict(cat, rfile)
+            keys = systs.keys()
+            
+            jet_keys = filter(lambda k: 'jet_' in k, keys)
+            met_keys = filter(lambda k: 'met_' in k, keys)
+            tau_keys = filter(lambda k: 'tau_' in k, keys)
+            theory_keys = filter(lambda k: 'theory_' in k, keys)
+            other_keys = filter(lambda k: k not in jet_keys + met_keys + tau_keys + theory_keys, keys)
+
+            log.info('{}/{}/jet'.format(cat, sample.name))
+            out.mkdir('{}/{}/jet'.format(cat, sample.name))
+            out.cd('{}/{}/jet'.format(cat, sample.name))
+            for k in jet_keys:
+                #                 log.info('\t {} \t {} \t {}'.format(k, systs[k]['high'], systs[k]['low']))
                 c = raw_np_plot(rfile, k, cat, sample)
                 c.name = k
                 c.title = k
                 c.SaveAs('./plots/np_plot_{0}_{1}_{2}.pdf'.format(k, cat, sample.name))
                 c.Write()
+
+            log.info('{}/{}/met'.format(cat, sample.name))
+            out.mkdir('{}/{}/met'.format(cat, sample.name))
+            out.cd('{}/{}/met'.format(cat, sample.name))
+            for k in met_keys:
+                #                 log.info('\t {} \t {} \t {}'.format(k, systs[k]['high'], systs[k]['low']))
+                c = raw_np_plot(rfile, k, cat, sample)
+                c.name = k
+                c.title = k
+                c.SaveAs('./plots/np_plot_{0}_{1}_{2}.pdf'.format(k, cat, sample.name))
+                c.Write()
+
+            log.info('{}/{}/tau'.format(cat, sample.name))
+            out.mkdir('{}/{}/tau'.format(cat, sample.name))
+            out.cd('{}/{}/tau'.format(cat, sample.name))
+            for k in tau_keys:
+                #                 log.info('\t {} \t {} \t {}'.format(k, systs[k]['high'], systs[k]['low']))
+                c = raw_np_plot(rfile, k, cat, sample)
+                c.name = k
+                c.title = k
+                c.SaveAs('./plots/np_plot_{0}_{1}_{2}.pdf'.format(k, cat, sample.name))
+                c.Write()
+
+            log.info('{}/{}/theory'.format(cat, sample.name))
+            out.mkdir('{}/{}/theory'.format(cat, sample.name))
+            out.cd('{}/{}/theory'.format(cat, sample.name))
+            for k in theory_keys:
+                #                 log.info('\t {} \t {} \t {}'.format(k, systs[k]['high'], systs[k]['low']))
+                c = raw_np_plot(rfile, k, cat, sample)
+                c.name = k
+                c.title = k
+                c.SaveAs('./plots/np_plot_{0}_{1}_{2}.pdf'.format(k, cat, sample.name))
+                c.Write()
+
+            log.info('{}/{}/other'.format(cat, sample.name))
+            out.mkdir('{}/{}/other'.format(cat, sample.name))
+            out.cd('{}/{}/other'.format(cat, sample.name))
+            for k in other_keys:
+                #                 log.info('\t {} \t {} \t {}'.format(k, systs[k]['high'], systs[k]['low']))
+                c = raw_np_plot(rfile, k, cat, sample)
+                c.name = k
+                c.title = k
+                c.SaveAs('./plots/np_plot_{0}_{1}_{2}.pdf'.format(k, cat, sample.name))
+                c.Write()
+
 
     out.Close()
 
