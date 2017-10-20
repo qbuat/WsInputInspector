@@ -12,7 +12,7 @@ set_style('ATLAS', shape='rect')
 
 from tools.sample import Sample
 from tools.fancy import syst_envelop, envelop
-from tools import CATEGORIES_MERGED
+from tools import CATEGORIES_MERGED, CATEGORIES_MVA
 from tools.plotting import raw_np_plot
 
 ROOT.gROOT.SetBatch(True)
@@ -25,6 +25,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('file1')
+    parser.add_argument('--mva', action='store_true', default=False)
     args = parser.parse_args()
 
 
@@ -38,10 +39,12 @@ if __name__ == '__main__':
     Fake = Sample('Fake', 'green', 'Fake')
     samples = [Higgs, ztt, Fake]
         
-
+    categories = CATEGORIES_MERGED
+    if args.mva:
+        categories = CATEGORIES_MVA
     
     out = root_open('./plots/np.root', 'recreate')
-    for cat in CATEGORIES_MERGED:
+    for cat in categories:
         out.mkdir(cat)
         out.cd(cat)
         for sample in samples:

@@ -8,13 +8,14 @@ log.setLevel(logging.INFO)
 
 
 from tools.yields import latex_line, pretty_yield_line, signal_latex_line
+from tools.analysis import measurement
 from tools.sample import Sample
 from tools.plotting import yields_chart, sample_pie, significance_chart, syst_yields_chart
-from tools import CATEGORIES_MERGED
+from tools import categories
 from rootpy.plotting import set_style
-
+from rootpy.plotting.base import convert_color
 import matplotlib.pyplot as plt
-
+import ROOT
 if __name__ == '__main__':
     
     import argparse
@@ -22,6 +23,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('file1')
+    parser.add_argument('--channel', default='hadhad', choices=['leplep', 'lephad', 'hadhad'])
     args = parser.parse_args()
 
 
@@ -29,63 +31,35 @@ if __name__ == '__main__':
     lines = []
     lines_with_errors = []
 
+    meas = measurement(rfile, args.channel)
 
+    samples = meas.backgrounds
+    data = meas.data
 
-
-    Data = Sample('Data', 'black', 'Data')
-    Ztt = Sample('Ztautau', 'yellow', 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'Zttewk'])
-    Fake = Sample('Fake', 'grey', 'Fake')
-    Diboson = Sample('VV', 'black', 'VV')
-    Top = Sample('Top', 'darkblue', 'Top')
-    Ewk = Sample('ewk', 'orange', 'ewk', sub_samples=['W', 'Zll'])
-    Higgs = Sample('Higgs', 'red', 'Higgs', sub_samples=['VBFH', 'ggH', 'ZH', 'WH', 'ttH'])
-    
-
-    Bkg = Sample('Bkg', 'black', 'bkg', sub_samples=[
-            'Ztt', 'Zttewk', 'Fake', 'VV', 'Top', 'W', 'Zll'])
-
-    VBFH = Sample('VBFH', 'red', 'VBFH')
-    ggH = Sample('ggH', 'blue', 'ggH')
-    WH = Sample('WH', 'green', 'WH')
-    ZH = Sample('ZH', 'pink', 'ZH')
-    ttH = Sample('ttH', 'purple', 'ttH')
-
-    higgs_samples = [
-        VBFH, ttH, ggH, WH, ZH,
-        ]
-
-
-
-#     set_style('ATLAS', mpl=True)
-    samples = [
-        Ztt, Fake, Diboson, Top, Ewk, Higgs
-        ]
-        
-    samples = samples[::-1]
-    cats = CATEGORIES_MERGED
+    cats = categories[args.channel]
 
 
     plt.figure(1, figsize=(15,10))
     for icat, cat in enumerate(cats):
         plt.subplot(3, 2, icat + 1)
         log.info(cat)
-        yields_chart(rfile, samples, Data, cat)
+        yields_chart(rfile, samples, data, cat)
 
-    plt.figure(2,figsize=(15,10))
-    for icat, cat in enumerate(cats):
-        log.info(cat)
-        plt.subplot(3, 2, icat + 1)
-        sample_pie(rfile, higgs_samples, cat, no_explode=True)
+#     plt.figure(2,figsize=(15,10))
+#     for icat, cat in enumerate(cats):
+#         log.info(cat)
+#         plt.subplot(3, 2, icat + 1)
+#         sample_pie(rfile, higgs_samples, cat, no_explode=True)
 
 
-    plt.figure(3)
-    significance_chart(rfile, Higgs, Bkg, cats)
+#     plt.figure(3)
+#     significance_chart(rfile, Higgs, Bkg, cats)
 
-    sys_high, sys_low = Ztt.systematics(cat, rfile)    
-    systs = sys_high + sys_low
-    for isys, sys in enumerate(systs):
-        plt.figure(3 + isys + 1)
-        log.info(sys)
-        syst_yields_chart(rfile, Ztt, sys, cats)
+#     sys_high, sys_low = Ztt.systematics(cat, rfile)    
+#     systs = sys_high + sys_low
+#     for isys, sys in enumerate(systs):
+#         plt.figure(3 + isys + 1)
+#         log.info(sys)
+#         syst_yields_chart(rfile, Ztt, sys, cats)
 
     plt.show()

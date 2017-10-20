@@ -8,8 +8,10 @@ from rootpy.plotting import Canvas
 import ROOT
 
 
-def yields_chart(rfile, samples, Data, cat):
+def yields_chart(rfile, samples, Data, cat, draw_label=True):
 
+    cat_name = cat.name
+    cat = cat.cats
     y_pos = np.arange(len(samples))
     x_pos = [s.yields(rfile, cat)[0] for s in samples]
     x_pos_er = [s.yields(rfile, cat)[1] for s in samples]
@@ -17,7 +19,7 @@ def yields_chart(rfile, samples, Data, cat):
     #         plt.subplot(len(cats) + 1, 1, ip + 1)
     plt.barh(
         y_pos, x_pos, xerr=x_pos_er, align='center', 
-        alpha=0.6 if s.name is 'Data' else 0.4,  
+        alpha=0.6 if s.name is 'Data' else 0.9,  
         color=[s.color for s in samples])
 
     # stacking bar (ugly but works I guess)
@@ -27,20 +29,21 @@ def yields_chart(rfile, samples, Data, cat):
     plt.barh(
         len(samples), samples[0].yields(rfile, cat)[0], 
         xerr=samples[0].yields(rfile, cat)[1],
-        align='center', alpha=0.4, color=samples[0].color)
+        align='center', alpha=0.9, color=samples[0].color)
     for isample, s in enumerate(samples[1:]):
         plt.barh(
             len(samples), s.yields(rfile, cat)[0], 
             xerr=s.yields(rfile, cat)[1],
-            align='center', alpha=0.4, color=s.color, 
+            align='center', alpha=0.9, color=s.color, 
             left=bottom[isample])
     plt.barh(
         len(samples) + 1, Data.yields(rfile, cat)[0], 
         xerr=Data.yields(rfile, cat)[1],
         alpha=0.6, align='center', color=Data.color)
-
+    min, max = plt.xlim()
+    plt.xlim(0, max)
     plt.yticks(np.arange(len(samples) + 2), [s.name for s in samples] + ['Total', 'Data'], fontsize=10)
-    plt.title(cat)
+    plt.title(cat_name)
 #     plt.xlabel('yield')
 #     return plt.figure()
 
