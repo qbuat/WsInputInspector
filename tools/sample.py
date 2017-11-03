@@ -18,6 +18,7 @@ class Sample(object):
         self._name = name
         self._color = color
         self._title = title
+        self.mpl_title = self._title.replace('#', '\\')
         self._sub_samples = sub_samples
 
     def __str__(self):

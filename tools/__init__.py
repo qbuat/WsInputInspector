@@ -42,16 +42,34 @@ CATEGORIES_LH = [
      Category('lh vbf tight', ('mhAll_cba_vbf_loose_signal', 'ehAll_cba_vbf_loose_signal')),
      Category('lh vbf loose', ('mhAll_cba_vbf_tight_signal', 'ehAll_cba_vbf_tight_signal')),
      Category('lh vbf top cr', ('mhAll_cba_vbf_top', 'ehAll_cba_vbf_top'), is_sr=False, is_cr=True),
-     Category('lh boost tight', ('mhAll_cba_boost_loose_signal', 'ehAll_cba_boost_loose_signal')),
-     Category('lh boost loose', ('mhAll_cba_boost_tight_signal', 'ehAll_cba_boost_tight_signal')),
+     Category('lh boost tight', ('mhAll_cba_boost_tight_signal', 'ehAll_cba_boost_tight_signal')),
+     Category('lh boost loose', ('mhAll_cba_boost_loose_signal', 'ehAll_cba_boost_loose_signal')),
      Category('lh boost top cr', ('mhAll_cba_boost_top', 'ehAll_cba_boost_top'), is_sr=False, is_cr=True),
 ]
+
+CATEGORIES_LL_SR = [
+    Category('ll vbf tight', 'llAll_cba_vbf_tight_signal'),
+    Category('ll vbf loose', 'llAll_cba_vbf_loose_signal'),
+    Category('ll boost tight', 'llAll_cba_boost_tight_signal'),
+    Category('ll boost loose', 'llAll_cba_boost_loose_signal'),
+]
+
+CATEGORIES_LH_SR = [
+     Category('lh vbf tight', ('mhAll_cba_vbf_loose_signal', 'ehAll_cba_vbf_loose_signal')),
+     Category('lh vbf loose', ('mhAll_cba_vbf_tight_signal', 'ehAll_cba_vbf_tight_signal')),
+     Category('lh boost tight', ('mhAll_cba_boost_tight_signal', 'ehAll_cba_boost_tight_signal')),
+     Category('lh boost loose', ('mhAll_cba_boost_loose_signal', 'ehAll_cba_boost_loose_signal')),
+]
+
 
 categories = {
     'hadhad': CATEGORIES_HH,
     'lephad': CATEGORIES_LH,
-    'leplep': CATEGORIES_LL
+    'leplep': CATEGORIES_LL,
+    'lephad_sr': CATEGORIES_LH_SR,
+    'leplep_sr': CATEGORIES_LL_SR
 }
+
 SAMPLES_NAMES = [
     'VBFH', 'ggH', 'ZH', 'WH', 'ttH',
     'Ztt', 'ZttEWK', 'ZttSh',
