@@ -133,7 +133,7 @@ def raw_np_plot(rfile, syst, cat, sample):
         h_high = sample.hist(rfile, cat.cats, systs[syst]['high'])
         h_high_r = h_high.Clone()
         h_high_r /= h_nom
-        h_high_r.linewidth = 2
+        h_high_r.linewidth = 3
         h_high_r.color = 'red'
         h_high_r.name = 'high'
         h_high_r.title = 'high'
@@ -148,7 +148,7 @@ def raw_np_plot(rfile, syst, cat, sample):
         h_low  = sample.hist(rfile, cat.cats, systs[syst]['low']) 
         h_low_r = h_low.Clone()
         h_low_r /= h_nom
-        h_low_r.linewidth = 2
+        h_low_r.linewidth = 3
         h_low_r.color = 'blue'
         h_low_r.name = 'low'
         h_low_r.title = 'low'
@@ -174,7 +174,7 @@ def raw_np_plot(rfile, syst, cat, sample):
     for b in h_nom_draw:
         b.value += ROOT.gPad.GetUymin()
     h_nom_draw.color = 'purple'
-    h_nom_draw.markersize = 0.1 * h_nom_draw.markersize
+    h_nom_draw.markersize = 0.5 * h_nom_draw.markersize
     h_nom_draw.name = 'Nominal'
     h_nom_draw.title = 'Nominal'
     h_nom_draw.legendstyle = 'lep'

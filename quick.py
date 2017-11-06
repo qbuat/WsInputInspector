@@ -22,14 +22,25 @@ ll_m =  measurement(ll_file, 'leplep')
 
 measurements = [hh_m, lh_m, ll_m]
 
+np_name = 'theory_ztt_qsf'
 for meas, cat in zip(measurements, CATEGORIES_BOOST_MERGED):
     ztt = meas.get_sample('Ztt')
-    c = raw_np_plot(meas.rfile, 'theory_ztt_qsf', cat, ztt)
-    c.SaveAs('{}_{}.pdf'.format(meas.channel, cat.name))
+    systs = ztt.systematics(cat.cats, meas.rfile)
+    systs_th = filter(lambda s: 'theory' in s, systs[0])
+    print cat.name
+    print systs_th
+    print
+    c = raw_np_plot(meas.rfile, np_name, cat, ztt)
+    c.SaveAs('{}_{}_{}.pdf'.format(np_name, meas.channel, cat.name.replace(' ', '_')))
 
 for meas, cat in zip(measurements, CATEGORIES_VBF_MERGED):
     ztt = meas.get_sample('Ztt')
-    c = raw_np_plot(meas.rfile, 'theory_ztt_qsf', cat, ztt)
-    c.SaveAs('{}_{}.pdf'.format(meas.channel, cat.name.replace(' ', '_')))
+    systs = ztt.systematics(cat.cats, meas.rfile)
+    systs_th = filter(lambda s: 'theory' in s, systs[0])
+    print cat.name
+    print systs_th
+    print
+    c = raw_np_plot(meas.rfile, np_name, cat, ztt)
+    c.SaveAs('{}_{}_{}.pdf'.format(np_name, meas.channel, cat.name.replace(' ', '_')))
 
 # print [c.name for c in CATEGORIES_VBF_MERGED]
