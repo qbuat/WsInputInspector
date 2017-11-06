@@ -13,63 +13,74 @@ class measurement(object):
         self.channel = channel
         self.categories = self.build_cat_list()
         self.systematics = self.build_syst_list()
+        self.sample_dict = {}
+
         self.data = Sample('Data', 'black', 'Data')
+        self.sample_dict[self.data.name] = self.data
+
         self.backgrounds = []
         self.background_keys = []
-        self._build_background(self.channel)
-        self.total_background = Sample('Total', 'blue', 'Total Bkg.',sub_samples=self.background_keys)
 
+        self.signals = []
+        self.signal_keys = []
+
+        self._build_background(self.channel)
+        self._build_signal()
+
+        self.total_background = Sample('Total', 'blue', 'Total Bkg.',sub_samples=self.background_keys)
         self.total_signal = Sample('Higgs', 'red', 'Higgs', ['ggH', 'VBFH', 'WH', 'ZH', 'ttH'])
-        self.signals = [
-            Sample('VBFH', convert_color(ROOT.kRed +1, 'mpl'), 'VBF'),
-            Sample('ggH', convert_color(ROOT.kRed - 1, 'mpl'), 'ggH'),
-            Sample('VH', convert_color(ROOT.kRed - 3, 'mpl'), 'VH', ['WH', 'ZH']),
-            Sample('ttH', convert_color(ROOT.kRed - 5, 'mpl'), 'ttH'),
-            ]
+
+    def get_sample(self, sample_name):
+        return self.sample_dict[sample_name]
+
     def build_cat_list(self):
         return [d for d in self.rfile]
 
     def build_syst_list(self):
         return []
 
+    def _build_signal(self):
+        self.signals = [
+            Sample('VBFH', convert_color(ROOT.kRed +1, 'mpl'), 'VBF'),
+            Sample('ggH', convert_color(ROOT.kRed - 1, 'mpl'), 'ggH'),
+            Sample('VH', convert_color(ROOT.kRed - 3, 'mpl'), 'VH', ['WH', 'ZH']),
+            Sample('ttH', convert_color(ROOT.kRed - 5, 'mpl'), 'ttH'),
+            ]
+        for s in self.signals:
+            self.sample_dict[s.name] = s
+
     def _build_background(self, channel):
+        Ztt = Sample('Ztt', convert_color(ROOT.kAzure + 1, 'mpl'), 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
+        Fake = Sample('Fake', 'yellow', 'Fake' if channel == 'hadhad' else 'Fakes')
+        Zll = Sample('Zll', convert_color(ROOT.kCyan - 10, 'mpl'), 'Z#rightarrowll', sub_samples=None if channel=='hadhad' else ['Zll', 'ZllEWK'])
+        Top = Sample('Top', convert_color(ROOT.kOrange + 1, 'mpl'), 'Top')
+        
         if channel == 'leplep':
-            Ztt = Sample(
-                'Ztt', convert_color(ROOT.kAzure + 1, 'mpl'), 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
-            Fake = Sample('Fake', 'yellow', 'Fakes')
-            Zll = Sample('Zll', convert_color(ROOT.kCyan - 10, 'mpl'), 'Z#rightarrowll', sub_samples=['Zll', 'ZllEWK'])
-            Top = Sample('Top', convert_color(ROOT.kOrange + 1, 'mpl'), 'Top')
             Others = Sample('Others', convert_color(ROOT.kViolet + 1, 'mpl'), 'Others', sub_samples=['VV', 'ggHWW', 'VBFHWW'])
             self.backgrounds = [
                 Ztt, Fake, Zll, Top, Others
                 ]
             self.background_keys = ['Ztt', 'ZttEWK', 'Fake', 'Top', 'Zll', 'ZllEWK', 'VV', 'ggHWW', 'VBFHWW']
-        elif channel == 'hadhad':
-            Ztt = Sample(
-                'Ztt', convert_color(ROOT.kAzure + 1, 'mpl'), 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
-            Fake = Sample('Fake', 'yellow', 'Fake')
-            Diboson = Sample('VV', convert_color(ROOT.kSpring - 1, 'mpl'), 'Di-Boson')
-            Zll = Sample('Zll', convert_color(ROOT.kCyan - 10, 'mpl'), 'Z#rightarrowll')
-            Top = Sample('Top', convert_color(ROOT.kOrange + 1, 'mpl'), 'Top')
-            Others = Sample('Others', convert_color(ROOT.kViolet + 1, 'mpl'), 'Others', sub_samples=['VV', 'W'])
-            self.backgrounds = [
-                Ztt, Fake, Zll, Top, Others
-                ]
-            self.background_keys = ['Ztt', 'ZttEWK', 'Fake', 'VV', 'Top', 'Zll', 'W']
+
         elif channel == 'lephad':
-            Ztt = Sample(
-                'Ztt', convert_color(ROOT.kAzure + 1, 'mpl'), 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
-            Fake = Sample('Fake', 'yellow', 'Fakes')
-            Top = Sample('Top', convert_color(ROOT.kOrange + 1, 'mpl'), 'Top')
-            Zll = Sample('Zll', convert_color(ROOT.kCyan - 10, 'mpl'), 'Z#rightarrowll', sub_samples=['Zll', 'ZllEWK'])
             Others = Sample('Others', convert_color(ROOT.kViolet + 1, 'mpl'), 'Others', sub_samples=['VV'])
             self.backgrounds = [
                 Ztt, Fake, Zll, Top, Others
                 ]
             self.background_keys = ['Ztt', 'ZttEWK', 'Fake', 'Top', 'Zll', 'ZllEWK', 'VV']
+
+        elif channel == 'hadhad':
+            Others = Sample('Others', convert_color(ROOT.kViolet + 1, 'mpl'), 'Others', sub_samples=['VV', 'W'])
+            self.backgrounds = [
+                Ztt, Fake, Zll, Top, Others
+                ]
+            self.background_keys = ['Ztt', 'ZttEWK', 'Fake', 'VV', 'Top', 'Zll', 'W']
+
         else:
             raise ValueError('Wrong channel')
             
+        for b in self.backgrounds:
+            self.sample_dict[b.name] = b
 
         
 

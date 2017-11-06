@@ -106,8 +106,9 @@ def syst_yields_chart(rfile, sample, syst, cats):
 
 
 def raw_np_plot(rfile, syst, cat, sample):
-    h_nom  = sample.hist(rfile, cat)
-    systs = sample.syst_dict(cat, rfile)
+
+    h_nom  = sample.hist(rfile, cat.cats)
+    systs = sample.syst_dict(cat.cats, rfile)
 
     c = Canvas()
     c.SetRightMargin(0.1)
@@ -129,7 +130,7 @@ def raw_np_plot(rfile, syst, cat, sample):
 
     if systs[syst]['high'] != '':
         do_high = True
-        h_high = sample.hist(rfile, cat, systs[syst]['high'])
+        h_high = sample.hist(rfile, cat.cats, systs[syst]['high'])
         h_high_r = h_high.Clone()
         h_high_r /= h_nom
         h_high_r.linewidth = 2
@@ -144,7 +145,7 @@ def raw_np_plot(rfile, syst, cat, sample):
         
     if systs[syst]['low'] != '':
         do_low = True
-        h_low  = sample.hist(rfile, cat, systs[syst]['low']) 
+        h_low  = sample.hist(rfile, cat.cats, systs[syst]['low']) 
         h_low_r = h_low.Clone()
         h_low_r /= h_nom
         h_low_r.linewidth = 2
@@ -184,7 +185,7 @@ def raw_np_plot(rfile, syst, cat, sample):
     syst_label.SetTextSize(20)
     syst_label.Draw('same')
 
-    cat_label = ROOT.TText(c.GetLeftMargin() + 0.03, 1 - c.GetTopMargin() - 0.08, 'Cat.: ' + cat)
+    cat_label = ROOT.TText(c.GetLeftMargin() + 0.03, 1 - c.GetTopMargin() - 0.08, 'Cat.: ' + cat.name)
     cat_label.SetNDC(True)
     cat_label.SetTextSize(20)
     cat_label.Draw('same')

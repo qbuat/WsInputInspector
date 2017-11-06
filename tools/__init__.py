@@ -4,20 +4,51 @@ log = log['tools']
 
 from .yields import PrettyYield
 from .sample import Sample
-
-class Category(object):
-    def __init__(self, name, cat_names, is_sr=True, is_cr=False):
-        self.name = name
-        self.cats = cat_names
-        self.is_sr = is_sr
-        self.is_cr = is_cr
-        self.is_vbf = True
-        self.is_boost = False
-        if 'boost' in self.name:
-            self.is_vbf = False
-            self.is_boost = True
+from .category import Category
         
 
+CATEGORIES_VBF_MERGED = [
+    Category(
+        'hh vbf', 
+        ('hhAll_cba_vbf_lowdr_signal', 
+         'hhAll_cba_vbf_highdr_tight_signal', 
+         'hhAll_cba_vbf_highdr_loose_signal'), 
+        is_vbf=True),
+    Category(
+        'lh vbf', 
+        ('mhAll_cba_vbf_loose_signal',
+         'ehAll_cba_vbf_loose_signal',
+         'mhAll_cba_vbf_tight_signal',
+         'ehAll_cba_vbf_tight_signal',
+            ), 
+        is_vbf=True),
+    Category(
+        'll vbf', 
+        ('llAll_cba_vbf_tight_signal',
+         'llAll_cba_vbf_loose_signal'),
+        is_vbf=True),
+]
+
+CATEGORIES_BOOST_MERGED = [
+    Category(
+        'hh boost', 
+        ('hhAll_cba_boost_tight_signal', 
+         'hhAll_cba_boost_loose_signal'), 
+        is_boost=True),
+    Category(
+        'lh boost', 
+        ('mhAll_cba_boost_loose_signal',
+         'ehAll_cba_boost_loose_signal',
+         'mhAll_cba_boost_tight_signal',
+         'ehAll_cba_boost_tight_signal',
+            ), 
+        is_boost=True),
+    Category(
+        'll boost', 
+        ('llAll_cba_boost_tight_signal',
+         'llAll_cba_boost_loose_signal'),
+        is_boost=True),
+]
 
 CATEGORIES_HH = [
     Category('hh vbf lowdr', 'hhAll_cba_vbf_lowdr_signal'),

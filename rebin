@@ -1,0 +1,142 @@
+#!/usr/bin/env python
+import ROOT
+import array
+import os
+
+#--------------------------------------------------------
+def copy_dir(input_dir, rebin=False, binning=None):
+    print 'copy', input_dir
+    sav_dir = ROOT.gDirectory.GetDirectory('')
+    adir = sav_dir.mkdir(input_dir.GetName())
+    adir.cd()
+    for key in input_dir.GetListOfKeys():
+        cl = ROOT.gROOT.GetClass(key.GetClassName())
+        if cl.InheritsFrom(ROOT.TDirectory.Class()):
+            input_dir.cd(key.GetName())
+            subdir = ROOT.gDirectory.GetDirectory('')
+            adir.cd()
+            copy_dir(subdir, rebin=rebin, binning=binning)
+            adir.cd()
+        else:
+            input_dir.cd()
+            obj = key.ReadObj()
+            adir.cd()
+            if rebin and isinstance(obj, ROOT.TH1F) and (obj.GetName() != 'lumiininvpb'):
+                rebinned_hist = obj.Rebin(len(binning) - 1, obj.GetName(), binning)
+                rebinned_hist.Write()
+            else:
+                obj.Write()
+            del obj
+    adir.SaveSelf(ROOT.kTRUE)
+    sav_dir.cd()
+
+#--------------------------------------------------------
+def rebin_input(input_file, name, binnings, output_dir='./'):
+    
+    output_name = os.path.join(
+        output_dir, os.path.basename(input_file.GetName()))
+    output_name = output_name.replace('.root', '_{}.root'.format(name))
+    print 'output:', output_name
+    rebinned_rfile = ROOT.TFile.Open(output_name, 'recreate')
+    rebinned_rfile.cd()
+    target = rebinned_rfile.GetDirectory('')
+    print 'target: ', target
+    print 'open source:', input_file.GetDirectory('')
+    target.cd()
+    for k in input_file.GetListOfKeys():
+        cl = ROOT.gROOT.GetClass(k.GetClassName())
+        if cl.InheritsFrom(ROOT.TDirectory.Class()):
+            copy_dir(
+                input_file.GetDirectory(k.GetName()), 
+                rebin=(k.GetName() in binnings.keys()), 
+                binning=binnings[k.GetName()] if k.GetName() in binnings.keys() else None)
+
+    print 'Writing ...'
+    target.Write()
+    target.Close()
+    print 'done!'
+
+
+if __name__ == '__main__':
+    
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser()
+    parser.add_argument('rfile')
+    parser.add_argument('--channel', default='hh', choices=['ll', 'lh', 'hh'])
+    parser.add_argument('--outdir', default='./workspaces')
+    args = parser.parse_args()
+
+    rfile = args.rfile
+    channel = args.channel
+    outdir = args.outdir
+
+    
+    categories_hh = [
+        'hhAll_cba_vbf_highdr_loose_signal',
+        'hhAll_cba_vbf_highdr_tight_signal',
+        'hhAll_cba_vbf_lowdr_signal',
+        'hhAll_cba_boost_loose_signal',
+        'hhAll_cba_boost_tight_signal',
+        ]
+
+    categories_lh = [
+        'mhAll_cba_vbf_loose_signal',
+        'ehAll_cba_vbf_loose_signal',
+        'mhAll_cba_vbf_tight_signal',
+        'ehAll_cba_vbf_tight_signal',
+        'mhAll_cba_boost_loose_signal',
+        'ehAll_cba_boost_loose_signal',
+        'mhAll_cba_boost_tight_signal',
+        'ehAll_cba_boost_tight_signal',
+        ]
+
+    categories_ll = [
+        'llAll_cba_vbf_tight_signal',
+        'llAll_cba_vbf_loose_signal',
+        'llAll_cba_boost_tight_signal',
+        'llAll_cba_boost_loose_signal',
+        ]
+
+    if args.channel == 'hh':
+        categories = categories_hh
+    elif args.channel == 'lh':
+        categories = categories_lh
+    elif args.channel == 'll':
+        categories = categories_ll
+    else:
+        raise ValueError
+
+    binnings_dict = {
+        'hhAll_cba_vbf_highdr_loose_signal': array.array('d', [0, 40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'hhAll_cba_vbf_highdr_tight_signal': array.array('d', [0, 40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'hhAll_cba_vbf_lowdr_signal':        array.array('d', [0, 40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'hhAll_cba_boost_loose_signal':      array.array('d', [0, 40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'hhAll_cba_boost_tight_signal':      array.array('d', [0, 40, 60, 80, 100, 120, 140, 160, 180, 200]),
+
+        'mhAll_cba_vbf_loose_signal':        array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'ehAll_cba_vbf_loose_signal':        array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'mhAll_cba_vbf_tight_signal':        array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'ehAll_cba_vbf_tight_signal':        array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'mhAll_cba_boost_loose_signal':      array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'ehAll_cba_boost_loose_signal':      array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'mhAll_cba_boost_tight_signal':      array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
+        'ehAll_cba_boost_tight_signal':      array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
+
+        'llAll_cba_vbf_loose_signal':        array.array('d', [60, 80, 100, 120, 140, 160, 180, 200]),
+        'llAll_cba_vbf_tight_signal':        array.array('d', [60, 80, 100, 120, 140, 160, 180, 200]),
+        'llAll_cba_boost_loose_signal':      array.array('d', [60, 80, 100, 120, 140, 160, 180, 200]),
+        'llAll_cba_boost_tight_signal':      array.array('d', [60, 80, 100, 120, 140, 160, 180, 200]),
+        }
+    
+
+    binnings = {}
+    for cat in categories:
+        binnings[cat] = binnings_dict[cat]
+
+    input_file = ROOT.TFile.Open(rfile, 'read')
+    print 'output directory: {}'.format(outdir)
+
+    rebin_input(input_file, 'rebinned', binnings, output_dir=outdir)
+    print 'huh?'
+            

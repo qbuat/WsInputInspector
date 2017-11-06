@@ -30,21 +30,27 @@ class Sample(object):
 
         _sys_high = []
         _sys_low = []
+        cat_list = cat
+        if not isinstance(cat, (list, tuple)):
+            cat_list = list(cat)
+
         if self._sub_samples is None:
-            for h in rfile['{0}/{1}'.format(
-                cat, self.name)]:
-                if h.name.endswith('_high'):
-                    _sys_high.append(h.name)
-                if h.name.endswith('_low'):
-                    _sys_low.append(h.name)
+            for c in cat_list:
+                for h in rfile['{0}/{1}'.format(
+                        c, self.name)]:
+                    if h.name.endswith('_high'):
+                        _sys_high.append(h.name)
+                    if h.name.endswith('_low'):
+                        _sys_low.append(h.name)
         else:
             for samp in self._sub_samples:
-                for h in rfile['{0}/{1}'.format(
-                        cat, samp)]:
-                    if h.name.endswith('_high') and h.name not in _sys_high:
-                        _sys_high.append(h.name)
-                    if h.name.endswith('_low') and h.name not in _sys_low:
-                        _sys_low.append(h.name)
+                for c in cat_list:
+                    for h in rfile['{0}/{1}'.format(
+                            c, samp)]:
+                        if h.name.endswith('_high') and h.name not in _sys_high:
+                            _sys_high.append(h.name)
+                        if h.name.endswith('_low') and h.name not in _sys_low:
+                            _sys_low.append(h.name)
 
 
         return [_sys_high, _sys_low]
