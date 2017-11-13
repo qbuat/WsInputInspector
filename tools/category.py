@@ -14,7 +14,7 @@ class Category(object):
         if isinstance(cat_names, (list, tuple)):
             self.cats = cat_names
         else:
-            self.cats = list(cat_names)
+            self.cats = [cat_names]
 
         self.is_sr = is_sr
         self.is_cr = is_cr

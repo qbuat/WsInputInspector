@@ -1,3 +1,6 @@
 *~
 *pyc
 *png
+plots/
+.ipynb_checkpoints
+data/
