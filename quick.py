@@ -31,8 +31,8 @@ def make_plot(measurements, categories, no_plotting=False):
 # hh_file = root_open('/Users/quentin/cernbox/workspaces/htt_sept28/hhAll_merged_WSinput_WithTheoryEnv_WithModJERVar_rebinned.root')
 # hh_file = root_open('/Users/quentin/cernbox/workspaces/htt_fine_binning/hhAll_merged_WSinput_WithTheoryEnv_WithModJERVar.root')
 # lh_file = root_open('/Users/quentin/cernbox/workspaces/htt_fine_binning/lephad_fs46_MMC_Fine_BL_WithModJERVar_WithTheoryEnv.root')
-hh_file = root_open('hhAll_merged_WSinput_WithTheoryEnv_WithModJERVar_rebinned.root')
-lh_file = root_open('lephad_fs46_MMC_Fine_BL_WithModJERVar_WithTheoryEnv_rebinned.root')
+hh_file = root_open('data/hhAll_merged_WSinput_WithTheoryEnv_WithModJERVar_rebinned.root')
+lh_file = root_open('data/lephad_fs46_MMC_Fine_BL_WithModJERVar_WithTheoryEnv_rebinned.root')
 ll_file = root_open('/Users/quentin/cernbox/workspaces/htt_fine_binning/leplep_17-09-26.all.dilep_pt_rebin_fake_WithTheoryEnv_WithModJERVar.root')
 # ll_file = root_open('leplep_17-09-26.all.dilep_pt_rebinned.root')
 

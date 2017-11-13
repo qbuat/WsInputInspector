@@ -50,8 +50,8 @@ class measurement(object):
             self.sample_dict[s.name] = s
 
     def _build_background(self, channel):
-#         Ztt = Sample('Ztt', convert_color(ROOT.kAzure + 1, 'mpl'), 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
-        Ztt = Sample('Ztt', convert_color(ROOT.kAzure + 1, 'mpl'), 'Z#rightarrow#tau#tau', sub_samples=['Ztt'])
+        Ztt = Sample('Ztt', convert_color(ROOT.kAzure + 1, 'mpl'), 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
+#         Ztt = Sample('Ztt', convert_color(ROOT.kAzure + 1, 'mpl'), 'Z#rightarrow#tau#tau', sub_samples=['Ztt'])
         Fake = Sample('Fake', 'yellow', 'Fake' if channel == 'hadhad' else 'Fakes')
         Zll = Sample('Zll', convert_color(ROOT.kCyan - 10, 'mpl'), 'Z#rightarrowll', sub_samples=None if channel=='hadhad' else ['Zll', 'ZllEWK'])
         Top = Sample('Top', convert_color(ROOT.kOrange + 1, 'mpl'), 'Top')

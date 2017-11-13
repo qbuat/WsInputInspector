@@ -114,6 +114,14 @@ class Sample(object):
                     hlist.append(h)
                 except:
                     print Warning('\t wrong name: {0}, {1}, {2}'.format(cat, s, hist_name))
+                    if hist_name != 'nominal':
+                        log.warning('try to use nominal instead of {}'.format(hist_name))
+                        try:
+                            h = rfile['{0}/{1}/nominal'.format(cat, s)]
+                            hlist.append(h)
+                        except:
+                            print Warning('\t wrong name: nominal does not exist either')
+
             sum_hist = hlist[0].Clone()
             for h in hlist[1:]:
                 sum_hist += h
