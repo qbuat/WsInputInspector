@@ -124,8 +124,8 @@ if __name__ == '__main__':
         'hhAll_cba_vbf_lowdr_signal':        array.array('d', [0, 40, 60, 80, 100, 120, 140, 160, 180, 200]),
 #         'hhAll_cba_boost_loose_signal':      array.array('d', [0, 40, 60, 80, 100, 120, 140, 160, 180, 200]),
 #         'hhAll_cba_boost_tight_signal':      array.array('d', [0, 40, 60, 80, 100, 120, 140, 160, 180, 200]),
-        'hhAll_cba_boost_loose_signal':      array.array('d', [0.0, 80.0, 100.0, 110., 115.0, 125.0, 140.0, 160.0, 180.0]),
-        'hhAll_cba_boost_tight_signal':      array.array('d', [0.0, 80.0, 100.0, 105.0, 115.0, 130.0, 200.0]),
+        'hhAll_cba_boost_loose_signal':      array.array('d', [0.0, 80.0, 100.0, 120, 140.0, 200.0]),
+        'hhAll_cba_boost_tight_signal':      array.array('d', [0.0, 80.0, 100.0, 120, 140, 200.0]),
 
         'mhAll_cba_vbf_loose_signal':        array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
         'ehAll_cba_vbf_loose_signal':        array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
@@ -137,10 +137,10 @@ if __name__ == '__main__':
 #         'mhAll_cba_boost_tight_signal':      array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
 #         'ehAll_cba_boost_tight_signal':      array.array('d', [40, 60, 80, 100, 120, 140, 160, 180, 200]),
 
-        'mhAll_cba_boost_loose_signal':      array.array('d', [10.0, 80.0, 110.0, 120.0, 140.0, 150.0, 180.0, 230.0]),
-        'ehAll_cba_boost_loose_signal':      array.array('d', [10.0, 80.0, 110.0, 120.0, 140.0, 150.0, 180.0, 230.0]),
-        'mhAll_cba_boost_tight_signal':      array.array('d', [10.0, 80.0, 110.0, 120.0, 140.0, 150.0, 180.0, 230.0]),
-        'ehAll_cba_boost_tight_signal':      array.array('d', [10.0, 80.0, 110.0, 120.0, 140.0, 150.0, 180.0, 230.0]),
+        'mhAll_cba_boost_loose_signal':      array.array('d', [10.0, 80.0, 100.0, 120.0, 140.0, 160.0, 230.0]),
+        'ehAll_cba_boost_loose_signal':      array.array('d', [10.0, 80.0, 100.0, 120.0, 140.0, 160.0, 230.0]),
+        'mhAll_cba_boost_tight_signal':      array.array('d', [10.0, 80.0, 100.0, 120.0, 140.0, 160.0, 230.0]),
+        'ehAll_cba_boost_tight_signal':      array.array('d', [10.0, 80.0, 100.0, 120.0, 140.0, 160.0, 230.0]),
 
         'llAll_cba_vbf_loose_signal':        array.array('d', [60, 80, 100, 120, 140, 160, 180, 200]),
         'llAll_cba_vbf_tight_signal':        array.array('d', [60, 80, 100, 120, 140, 160, 180, 200]),

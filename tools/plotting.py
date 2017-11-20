@@ -134,6 +134,7 @@ def raw_np_plot(rfile, syst, cat, sample):
         h_high_r = h_high.Clone()
         h_high_r /= h_nom
         h_high_r.linewidth = 3
+        h_high_r.fillstyle = 0
         h_high_r.color = 'red'
         h_high_r.name = 'high'
         h_high_r.title = 'high'
@@ -149,6 +150,7 @@ def raw_np_plot(rfile, syst, cat, sample):
         h_low_r = h_low.Clone()
         h_low_r /= h_nom
         h_low_r.linewidth = 3
+        h_low_r.fillstyle = 0
         h_low_r.color = 'blue'
         h_low_r.name = 'low'
         h_low_r.title = 'low'
