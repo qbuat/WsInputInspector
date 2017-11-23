@@ -24,7 +24,7 @@ def make_plot(meas, categories, sample='Ztt', key_filter=None, no_plotting=False
         if key_filter is None:
             keys = sorted(systs.keys())
         else:
-            keys = filter(lambda s: 'fake' in s, systs.keys())
+            keys = filter(lambda s: key_filter in s, systs.keys())
             keys = sorted(keys)
 
         log.info('Make plot for NPs:')
@@ -33,7 +33,7 @@ def make_plot(meas, categories, sample='Ztt', key_filter=None, no_plotting=False
             if no_plotting:
                 continue
             c = raw_np_plot(meas.rfile, k, cat, samp)
-            c.SaveAs('plots/{}_{}_{}.pdf'.format(k, meas.channel, cat.name.replace(' ', '_')))
+            c.SaveAs('plots/{}_{}_{}_{}.pdf'.format(meas.channel, cat.name.replace(' ', '_'), sample, k))
 
 
 # hh_file = root_open('/Users/quentin/cernbox/workspaces/htt_sept28/hhAll_merged_WSinput_WithTheoryEnv_WithModJERVar_rebinned.root')
@@ -43,9 +43,11 @@ def make_plot(meas, categories, sample='Ztt', key_filter=None, no_plotting=False
 # lh_file = root_open('data/lephad_fs46_MMC_Fine_BL_WithModJERVar_WithTheoryEnv_rebinned.root')
 # ll_file = root_open('/Users/quentin/cernbox/workspaces/htt_fine_binning/leplep_17-09-26.all.dilep_pt_rebin_fake_WithTheoryEnv_WithModJERVar.root')
 
-hh_file = root_open('/Users/quentin/cernbox/workspaces/htt_nov20/hhAll_merged_WSinput_rebinned_WithTheoryEnv_WithModJERVar.root')
+hh_file = root_open('/Users/quentin/cernbox/workspaces/htt_nov23/hhAll_merged_WSinput_rebinned_WithTheoryEnv_WithModJERVar.root')
 lh_file = root_open('/Users/quentin/cernbox/workspaces/htt_nov20/lephad_mh0059_MMC_rebinned_WithModJERVar_WithTheoryEnv.root')
-ll_file = root_open('/Users/quentin/cernbox/workspaces/htt_nov20/leplep_17-11-03.all.dilep_pt_rebin_WithTheoryEnv_WithModJERVar_fakes.root')
+ll_file = root_open('/Users/quentin/cernbox/workspaces/htt_nov23/leplep_17-11-22.EE-MM-DF-split.MGZttShowerSys.newFakes.mmc_mlm.rebin_WithTheoryEnv_WithModJERVar_fakes.root')
+# ll_file = root_open('/Users/quentin/cernbox/workspaces/htt_nov20/leplep_17-11-03.all.dilep_pt_rebin_WithTheoryEnv_WithModJERVar_fakes.root')
+
 # ll_file = root_open('leplep_17-09-26.all.dilep_pt_rebinned.root')
 
 hh_m =  measurement(hh_file, 'hadhad')
@@ -60,9 +62,10 @@ measurements = [
 
 # np_name = 'theory_ztt_qsf'
 
-make_plot(ll_m, CATEGORIES_LL, sample='Fake', key_filter='fake', no_plotting=False)
-make_plot(lh_m, CATEGORIES_LH, sample='Fake', key_filter='fake', no_plotting=False)
-make_plot(hh_m, CATEGORIES_HH, sample='Fake', key_filter='fake', no_plotting=False)
+make_plot(ll_m, CATEGORIES_LL, sample='Ztt', key_filter='ckk', no_plotting=False)
+
+# make_plot(lh_m, CATEGORIES_LH, sample='Fake', key_filter='fake', no_plotting=False)
+#make_plot(hh_m, CATEGORIES_HH, sample='Ztt', key_filter=None, no_plotting=False)
 
 # make_plot(measurements, CATEGORIES_VBF_MERGED, no_plotting=True)
 
