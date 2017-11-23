@@ -120,7 +120,8 @@ def raw_np_plot(rfile, syst, cat, sample):
     h_template.fillstyle = '//'
     h_template.fillcolor = 'black'
     h_template.markersize = 0.
-    h_template.yaxis.SetRangeUser(0.5, 1.5)
+    h_template.yaxis.SetRangeUser(0.01, 2.0)
+#     h_template.yaxis.SetRangeUser(0.5, 1.5)
     h_template.xaxis.title = h_nom.xaxis.title
     h_template.yaxis.title = 'Fractional Uncertainty'
     h_template.name = 'Stat_Uncert'

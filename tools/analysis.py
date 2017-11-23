@@ -24,7 +24,7 @@ class measurement(object):
         self.signals = []
         self.signal_keys = []
 
-        self._build_background(self.channel)
+        self._build_background()
         self._build_signal()
 
         self.total_background = Sample('Total', 'blue', 'Total Bkg.',sub_samples=self.background_keys)
@@ -49,37 +49,31 @@ class measurement(object):
         for s in self.signals:
             self.sample_dict[s.name] = s
 
-    def _build_background(self, channel):
+    def _build_background(self):
+        """
+        """
         Ztt = Sample('Ztt', convert_color(ROOT.kAzure + 1, 'mpl'), 'Z#rightarrow#tau#tau', sub_samples=['Ztt', 'ZttEWK'])
-#         Ztt = Sample('Ztt', convert_color(ROOT.kAzure + 1, 'mpl'), 'Z#rightarrow#tau#tau', sub_samples=['Ztt'])
-        Fake = Sample('Fake', 'yellow', 'Fake' if channel == 'hadhad' else 'Fakes')
-        Zll = Sample('Zll', convert_color(ROOT.kCyan - 10, 'mpl'), 'Z#rightarrowll', sub_samples=None if channel=='hadhad' else ['Zll', 'ZllEWK'])
+        Fake = Sample('Fake', 'yellow', 'Fake' if self.channel == 'hadhad' else 'Fakes')
+        Zll = Sample('Zll', convert_color(ROOT.kCyan - 10, 'mpl'), 'Z#rightarrowll', sub_samples=None if self.channel=='hadhad' else ['Zll', 'ZllEWK'])
         Top = Sample('Top', convert_color(ROOT.kOrange + 1, 'mpl'), 'Top')
         
-        if channel == 'leplep':
+        if self.channel == 'leplep':
             Others = Sample('Others', convert_color(ROOT.kViolet + 1, 'mpl'), 'Others', sub_samples=['VV', 'ggHWW', 'VBFHWW'])
-            self.backgrounds = [
-                Ztt, Fake, Zll, Top, Others
-                ]
             self.background_keys = ['Ztt', 'ZttEWK', 'Fake', 'Top', 'Zll', 'ZllEWK', 'VV', 'ggHWW', 'VBFHWW']
 
-        elif channel == 'lephad':
+        elif self.channel == 'lephad':
             Others = Sample('Others', convert_color(ROOT.kViolet + 1, 'mpl'), 'Others', sub_samples=['VV'])
-            self.backgrounds = [
-                Ztt, Fake, Zll, Top, Others
-                ]
             self.background_keys = ['Ztt', 'ZttEWK', 'Fake', 'Top', 'Zll', 'ZllEWK', 'VV']
 
-        elif channel == 'hadhad':
+        elif self.channel == 'hadhad':
             Others = Sample('Others', convert_color(ROOT.kViolet + 1, 'mpl'), 'Others', sub_samples=['VV', 'W'])
-            self.backgrounds = [
-                Ztt, Fake, Zll, Top, Others
-                ]
             self.background_keys = ['Ztt', 'ZttEWK', 'Fake', 'VV', 'Top', 'Zll', 'W']
 
         else:
             raise ValueError('Wrong channel')
             
+        self.backgrounds = [Ztt, Fake, Zll, Top, Others]
+
         for b in self.backgrounds:
             self.sample_dict[b.name] = b
 

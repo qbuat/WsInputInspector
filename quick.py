@@ -1,32 +1,35 @@
+import os
+
 from tools.plotting import raw_np_plot
-from tools import CATEGORIES_VBF_MERGED, CATEGORIES_BOOST_MERGED, CATEGORIES_LL, CATEGORIES_HH, CATEGORIES_LH
+from tools import (CATEGORIES_VBF_MERGED, CATEGORIES_BOOST_MERGED, 
+                   CATEGORIES_LL, CATEGORIES_HH, CATEGORIES_LH)
+
 from tools.analysis import measurement
 from rootpy.io import root_open
-from tools.analysis import measurement
 from rootpy.plotting import set_style
 import ROOT
 set_style('ATLAS', shape='rect')
 ROOT.gROOT.SetBatch(True)
+from tools import log; log = log[__name__]
 
 
-
-def make_plot(meas, categories, sample='Ztt', no_plotting=False):
+def make_plot(meas, categories, sample='Ztt', key_filter=None, no_plotting=False):
     
-#     for meas, cat in zip(measurements, categories):
-#     meas = measurements[0]
-#     for cat in categories:
     for cat in categories:
         if cat.is_cr:
             continue
-        print meas.channel, ":", cat.name, cat.cats
+
         samp = meas.get_sample(sample)
         systs = samp.syst_dict(cat.cats, meas.rfile)
-#         keys = filter(lambda s: 'theory' and 'ckk' in s, systs.keys())
-        keys = filter(lambda s: 'theory' and 'mur_muf_enve' in s, systs.keys())
-#         keys = filter(lambda s: 'fake' in s, systs.keys())
-        print meas.channel
-        for k in sorted(keys):
-            print '\t', k
+        if key_filter is None:
+            keys = sorted(systs.keys())
+        else:
+            keys = filter(lambda s: 'fake' in s, systs.keys())
+            keys = sorted(keys)
+
+        log.info('Make plot for NPs:')
+        for k in keys:
+#             log.info('\t {}'.format(k))
             if no_plotting:
                 continue
             c = raw_np_plot(meas.rfile, k, cat, samp)
@@ -57,9 +60,9 @@ measurements = [
 
 # np_name = 'theory_ztt_qsf'
 
-make_plot(ll_m, CATEGORIES_LL, no_plotting=False)
-make_plot(lh_m, CATEGORIES_LH, no_plotting=False)
-make_plot(hh_m, CATEGORIES_HH, no_plotting=False)
+make_plot(ll_m, CATEGORIES_LL, sample='Fake', key_filter='fake', no_plotting=False)
+make_plot(lh_m, CATEGORIES_LH, sample='Fake', key_filter='fake', no_plotting=False)
+make_plot(hh_m, CATEGORIES_HH, sample='Fake', key_filter='fake', no_plotting=False)
 
 # make_plot(measurements, CATEGORIES_VBF_MERGED, no_plotting=True)
 

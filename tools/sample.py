@@ -36,8 +36,8 @@ class Sample(object):
 
         if self._sub_samples is None:
             for c in cat_list:
-                for h in rfile['{0}/{1}'.format(
-                        c, self.name)]:
+                for h in rfile.Get('{0}/{1}'.format(
+                        c, self.name)):
                     if h.name.endswith('_high'):
                         _sys_high.append(h.name)
                     if h.name.endswith('_low'):
@@ -45,8 +45,8 @@ class Sample(object):
         else:
             for samp in self._sub_samples:
                 for c in cat_list:
-                    for h in rfile['{0}/{1}'.format(
-                            c, samp)]:
+                    for h in rfile.Get('{0}/{1}'.format(
+                            c, samp)):
                         if h.name.endswith('_high') and h.name not in _sys_high:
                             _sys_high.append(h.name)
                         if h.name.endswith('_low') and h.name not in _sys_low:
@@ -100,8 +100,8 @@ class Sample(object):
 
         if self._sub_samples is None:
             try:
-                return rfile['{0}/{1}/{2}'.format(
-                        cat, self.name, hist_name)]
+                return rfile.Get('{0}/{1}/{2}'.format(
+                        cat, self.name, hist_name))
             except:
                 raise ValueError('wrong name 1')
 
@@ -109,18 +109,18 @@ class Sample(object):
             hlist = []
             for s in self._sub_samples:
                 try:
-                    h = rfile['{0}/{1}/{2}'.format(
-                            cat, s, hist_name)]
+                    h = rfile.Get('{0}/{1}/{2}'.format(
+                            cat, s, hist_name))
                     hlist.append(h)
                 except:
                     print Warning('\t wrong name: {0}, {1}, {2}'.format(cat, s, hist_name))
                     if hist_name != 'nominal':
                         log.warning('try to use nominal instead of {}'.format(hist_name))
                         try:
-                            h = rfile['{0}/{1}/nominal'.format(cat, s)]
+                            h = rfile.Get('{0}/{1}/nominal'.format(cat, s))
                             hlist.append(h)
                         except:
-                            print Warning('\t wrong name: nominal does not exist either')
+                            raise ValueError('\t wrong name: nominal does not exist either')
 
             sum_hist = hlist[0].Clone()
             for h in hlist[1:]:
