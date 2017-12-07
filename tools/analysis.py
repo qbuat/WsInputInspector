@@ -62,8 +62,8 @@ class measurement(object):
             self.background_keys = ['Ztt', 'ZttEWK', 'Fake', 'Top', 'Zll', 'ZllEWK', 'VV', 'ggHWW', 'VBFHWW']
 
         elif self.channel == 'lephad':
-            Others = Sample('Others', convert_color(ROOT.kViolet + 1, 'mpl'), 'Others', sub_samples=['VV'])
-            self.background_keys = ['Ztt', 'ZttEWK', 'Fake', 'Top', 'Zll', 'ZllEWK', 'VV']
+            Others = Sample('Others', convert_color(ROOT.kViolet + 1, 'mpl'), 'Others', sub_samples=['VV', 'W', 'WEWK'])
+            self.background_keys = ['Ztt', 'ZttEWK', 'Fake', 'Top', 'Zll', 'ZllEWK', 'VV', 'W', 'WEWK']
 
         elif self.channel == 'hadhad':
             Others = Sample('Others', convert_color(ROOT.kViolet + 1, 'mpl'), 'Others', sub_samples=['VV', 'W'])

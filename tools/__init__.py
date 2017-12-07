@@ -23,12 +23,14 @@ CATEGORIES_VBF_MERGED = [
         is_vbf=True),
     Category(
         'll vbf', 
-        ('llAll_cba_vbf_tight_df_signal',
-         'llAll_cba_vbf_tight_ee_signal',
-         'llAll_cba_vbf_tight_mumu_signal',
-         'llAll_cba_vbf_loose_df_signal',
-         'llAll_cba_vbf_loose_ee_signal',
-         'llAll_cba_vbf_loose_mumu_signal'),
+        ('llAll_cba_vbf_tight_signal',
+         'llAll_cba_vbf_loose_signal'),
+#         ('llAll_cba_vbf_tight_df_signal',
+#          'llAll_cba_vbf_tight_ee_signal',
+#          'llAll_cba_vbf_tight_mumu_signal',
+#          'llAll_cba_vbf_loose_df_signal',
+#          'llAll_cba_vbf_loose_ee_signal',
+#          'llAll_cba_vbf_loose_mumu_signal'),
         is_vbf=True),
 ]
 
@@ -48,12 +50,14 @@ CATEGORIES_BOOST_MERGED = [
         is_boost=True),
     Category(
         'll boost', 
-        ('llAll_cba_boost_tight_df_signal',
-         'llAll_cba_boost_tight_ee_signal',
-         'llAll_cba_boost_tight_mumu_signal',
-         'llAll_cba_boost_loose_df_signal',
-         'llAll_cba_boost_loose_ee_signal',
-         'llAll_cba_boost_loose_mumu_signal'),
+        ('llAll_cba_boost_tight_signal',
+         'llAll_cba_boost_loose_signal'),
+#         ('llAll_cba_boost_tight_df_signal',
+#          'llAll_cba_boost_tight_ee_signal',
+#          'llAll_cba_boost_tight_mumu_signal',
+#          'llAll_cba_boost_loose_df_signal',
+#          'llAll_cba_boost_loose_ee_signal',
+#          'llAll_cba_boost_loose_mumu_signal'),
         is_boost=True),
 ]
 
@@ -68,49 +72,61 @@ CATEGORIES_HH = [
 CATEGORIES_LL = [
     Category(
         'll vbf tight', 
-        ('llAll_cba_vbf_tight_df_signal',
-         'llAll_cba_vbf_tight_ee_signal',
-         'llAll_cba_vbf_tight_mumu_signal')),
+        ('llAll_cba_vbf_tight_signal')
+#         ('llAll_cba_vbf_tight_df_signal',
+#          'llAll_cba_vbf_tight_ee_signal',
+#          'llAll_cba_vbf_tight_mumu_signal')
+        ),
     Category(
         'll vbf loose', 
-        ('llAll_cba_vbf_loose_df_signal',
-         'llAll_cba_vbf_loose_ee_signal',
-         'llAll_cba_vbf_loose_mumu_signal')),
+        ('llAll_cba_vbf_loose_signal')
+#         ('llAll_cba_vbf_loose_df_signal',
+#          'llAll_cba_vbf_loose_ee_signal',
+#          'llAll_cba_vbf_loose_mumu_signal')
+        ),
     Category(
         'll vbf top cr', 
-        ('llAll_cba_vbf_df_top',
-         'llAll_cba_vbf_ee_top',
-         'llAll_cba_vbf_mumu_top'), 
+        ('llAll_cba_vbf_top'),
+#         ('llAll_cba_vbf_df_top',
+#          'llAll_cba_vbf_ee_top',
+#          'llAll_cba_vbf_mumu_top'), 
         is_sr=False, 
         is_cr=True),
     Category(
         'll vbf zll cr', 
-        ('llAll_cba_vbf_ee_zll',
-         'llAll_cba_vbf_mumu_zll'),
+        ('llAll_cba_vbf_zll'),
+#         ('llAll_cba_vbf_ee_zll',
+#          'llAll_cba_vbf_mumu_zll'),
         is_sr=False, 
         is_cr=True),
     Category(
         'll boost tight', 
-        ('llAll_cba_boost_tight_df_signal',
-         'llAll_cba_boost_tight_ee_signal',
-         'llAll_cba_boost_tight_mumu_signal')),
+        ('llAll_cba_boost_tight_signal')
+#         ('llAll_cba_boost_tight_df_signal',
+#          'llAll_cba_boost_tight_ee_signal',
+#          'llAll_cba_boost_tight_mumu_signal')
+        ),
     Category(
         'll boost loose', 
-        ('llAll_cba_boost_loose_df_signal',
-         'llAll_cba_boost_loose_ee_signal',
-         'llAll_cba_boost_loose_mumu_signal')),
+        ('llAll_cba_boost_loose_signal')
+#         ('llAll_cba_boost_loose_df_signal',
+#          'llAll_cba_boost_loose_ee_signal',
+#          'llAll_cba_boost_loose_mumu_signal')
+        ),
     Category(
         'll boost top cr', 
-        ('llAll_cba_boost_df_top',
-         'llAll_cba_boost_ee_top',
-         'llAll_cba_boost_mumu_top'), 
+        ('llAll_cba_boost_top'),
+#         ('llAll_cba_boost_df_top',
+#          'llAll_cba_boost_ee_top',
+#          'llAll_cba_boost_mumu_top'), 
         is_sr=False, 
         is_cr=True),
     Category(
         'll boost zll cr', 
-        ('llAll_cba_boost_ee_zll',
-         'llAll_cba_boost_mumu_zll'),
-         is_sr=False, 
+        ('llAll_cba_boost_zll'),
+#         ('llAll_cba_boost_ee_zll',
+#          'llAll_cba_boost_mumu_zll'),
+        is_sr=False, 
         is_cr=True),
 ]
 
