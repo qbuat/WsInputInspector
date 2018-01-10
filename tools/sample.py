@@ -141,9 +141,19 @@ class Sample(object):
                 sum_hist += h
             return sum_hist
 
-    def yields(self, rfile, cat, name='nominal'):
-        return self.hist(rfile, cat, name).integral(
-            overflow=True, error=True)
+    def yields(self, rfile, cat, name='nominal', bin_range=None):
+        if bin_range is None:
+            return self.hist(rfile, cat, name).integral(
+                overflow=True, error=True)
+        else:
+            if not isinstance(bin_range, (list, tuple)):
+                raise ValueError
+            if len(bin_range) != 2:
+                raise ValueError
+
+            xbin1, xbin2 = bin_range[0], bin_range[1]
+            return self.hist(rfile, cat, name).integral(xbin1=xbin1, xbin2=xbin2, error=True)
+
 
     def yields_systs(self, rfile, cat, sym=True):
         nom, _ = self.yields(rfile, cat)

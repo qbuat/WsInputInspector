@@ -133,12 +133,12 @@ CATEGORIES_LL = [
 CATEGORIES_LH = [
      Category(
         'lh vbf tight', 
-        ('mhAll_cba_vbf_loose_signal', 
-         'ehAll_cba_vbf_loose_signal')),
-     Category(
-        'lh vbf loose', 
         ('mhAll_cba_vbf_tight_signal', 
          'ehAll_cba_vbf_tight_signal')),
+     Category(
+        'lh vbf loose', 
+        ('mhAll_cba_vbf_loose_signal', 
+         'ehAll_cba_vbf_loose_signal')),
      Category(
         'lh vbf top cr', 
         ('mhAll_cba_vbf_top', 

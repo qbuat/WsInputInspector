@@ -30,11 +30,27 @@ class measurement(object):
         self.total_background = Sample('Total', 'blue', 'Total Bkg.',sub_samples=self.background_keys)
         self.total_signal = Sample('Higgs', 'red', 'Higgs', ['ggH', 'VBFH', 'WH', 'ZH', 'ttH'])
 
+    def binnings(self):
+        print self.backgrounds[0]
+        for cat in self.categories:
+            h = self.backgrounds[0].hist(self.rfile, cat)
+            print list(self.backgrounds[0].hist(self.rfile, cat).xedges())
+            xbin1 = h.FindBin(100)
+            xbin2 = h.FindBin(150)
+            print cat, xbin1, xbin2, h.integral(xbin1=xbin1, xbin2=xbin2)
+
+    def bin_range(self, cat, xmin, xmax):
+        htemp = self.backgrounds[0].hist(self.rfile, cat)
+        xbin1 = htemp.FindBin(xmin)
+        xbin2 = htemp.FindBin(xmax)
+        print cat, 'Mass window = [{0}, {1}]'.format(htemp.GetBinLowEdge(xbin1), htemp.GetBinLowEdge(xbin2 + 1))
+        return htemp.FindBin(xmin), htemp.FindBin(xmax)
+
     def get_sample(self, sample_name):
         return self.sample_dict[sample_name]
 
     def build_cat_list(self):
-        return [d for d in self.rfile]
+        return [d.name for d in self.rfile]
 
     def build_syst_list(self):
         return []
