@@ -19,9 +19,14 @@ class Category(object):
         self.is_sr = is_sr
         self.is_cr = is_cr
 
-        self.is_vbf = is_vbf
-        self.is_boost = is_boost
 
         if 'boost' in self.name:
             self.is_vbf = False
             self.is_boost = True
+        elif 'vbf' in self.name:
+            self.is_vbf = True
+            self.is_boost = False
+        else:
+            log.warning('Category {} is neither vbf nor boost'.format(self.name))
+            self.is_vbf = False
+            self.is_boost = False

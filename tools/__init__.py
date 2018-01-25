@@ -63,8 +63,8 @@ CATEGORIES_BOOST_MERGED = [
 
 CATEGORIES_HH = [
     Category('hh vbf lowdr', 'hhAll_cba_vbf_lowdr_signal'),
-    Category('hh vbf highdr tight', 'hhAll_cba_vbf_highdr_tight_signal'),
-    Category('hh vbf highdr loose', 'hhAll_cba_vbf_highdr_loose_signal'),
+    Category('hh vbf tight', 'hhAll_cba_vbf_highdr_tight_signal'),
+    Category('hh vbf loose', 'hhAll_cba_vbf_highdr_loose_signal'),
     Category('hh boost tight', 'hhAll_cba_boost_tight_signal'),
     Category('hh boost loose', 'hhAll_cba_boost_loose_signal'),
 ]
@@ -164,13 +164,28 @@ CATEGORIES_LH = [
 CATEGORIES_LL_SR = [cat for cat in CATEGORIES_LL if cat.is_sr]
 CATEGORIES_LH_SR = [cat for cat in CATEGORIES_LH if cat.is_sr]
 
+CATEGORIES_HH_BOOST = [cat for cat in CATEGORIES_HH if cat.is_boost]
+CATEGORIES_HH_VBF =   [cat for cat in CATEGORIES_HH if cat.is_vbf]
+
+CATEGORIES_LH_BOOST_SR = [cat for cat in CATEGORIES_LH_SR if cat.is_boost]
+CATEGORIES_LH_VBF_SR =   [cat for cat in CATEGORIES_LH_SR if cat.is_vbf]
+
+CATEGORIES_LL_BOOST_SR = [cat for cat in CATEGORIES_LL_SR if cat.is_boost]
+CATEGORIES_LL_VBF_SR =   [cat for cat in CATEGORIES_LL_SR if cat.is_vbf]
+
 
 categories = {
     'hadhad': CATEGORIES_HH,
     'lephad': CATEGORIES_LH,
     'leplep': CATEGORIES_LL,
     'lephad_sr': CATEGORIES_LH_SR,
-    'leplep_sr': CATEGORIES_LL_SR
+    'leplep_sr': CATEGORIES_LL_SR,
+    'hadhad_vbf': CATEGORIES_HH_VBF,
+    'lephad_vbf_sr': CATEGORIES_LH_VBF_SR,
+    'leplep_vbf_sr': CATEGORIES_LL_VBF_SR,
+    'hadhad_boost': CATEGORIES_HH_BOOST,
+    'lephad_boost_sr': CATEGORIES_LH_BOOST_SR,
+    'leplep_boost_sr': CATEGORIES_LL_BOOST_SR,
 }
 
 SAMPLES_NAMES = [

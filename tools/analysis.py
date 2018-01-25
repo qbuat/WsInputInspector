@@ -50,7 +50,7 @@ class measurement(object):
         return self.sample_dict[sample_name]
 
     def build_cat_list(self):
-        return [d.name for d in self.rfile]
+        return [d for d in self.rfile]
 
     def build_syst_list(self):
         return []
