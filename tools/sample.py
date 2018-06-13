@@ -103,8 +103,13 @@ class Sample(object):
                 return rfile.Get('{0}/{1}/{2}'.format(
                         cat, self.name, hist_name))
             except:
-                raise ValueError('wrong name 1')
-
+                if hist_name == 'nominal':
+                    raise ValueError('wrong names {0}/{1}/{2}'.format(cat, self.name, hist_name))
+                else:
+                    print Warning('\t wrong name: {0}, {1}, {2}'.format(cat, self.name, hist_name))
+                    log.warning('try to use nominal instead of {}'.format(hist_name))
+                    return rfile.Get('{0}/{1}/nominal'.format(
+                            cat, self.name))
         else:
             hlist = []
             for s in self._sub_samples:
