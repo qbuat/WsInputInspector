@@ -341,18 +341,24 @@ if __name__ == '__main__':
 
     print postfit_pr
 
-
-    rfile_error_all = ROOT.TFile('/Users/quentin/hleptons/analyses/SM_Run2_Rel20.7/paper_histograms/workspaces/31MayPaper10GeVWithMGvsSHshapeCombination_HIST.root')
-    error_graph_all = rfile_error_all.Get('Htt_yearAll_chanAll_catAll_regsig_selCBA/Error')
-    c = pr_plot(postfit_pr, postfit_pr.keys(), bin_width=rebin_width, error_graph=error_graph_all)
-
+    all_categories = postfit_pr.keys()
     boost_categories = filter(lambda k: 'boost' in k, postfit_pr.keys())
-    rfile_error_boost = ROOT.TFile('/Users/quentin/hleptons/analyses/SM_Run2_Rel20.7/paper_histograms/workspaces/31MayPaper10GeVWithMGvsSHshapeBoost_HIST.root')
-    error_graph_boost = rfile_error_boost.Get('Htt_yearAll_chanAll_catboost_regsig_selCBA/Error')
-    c1 = pr_plot(postfit_pr, boost_categories, bin_width=rebin_width, label='All Boosted SRs', error_graph=error_graph_boost)
-
     vbf_categories = filter(lambda k: 'vbf' in k, postfit_pr.keys())
-    rfile_error_vbf = ROOT.TFile('/Users/quentin/hleptons/analyses/SM_Run2_Rel20.7/paper_histograms/workspaces/31MayPaper10GeVWithMGvsSHshapeVBF_HIST.root')
-    error_graph_vbf = rfile_error_vbf.Get('Htt_yearAll_chanAll_catvbf_regsig_selCBA/Error')
-    c2 = pr_plot(postfit_pr, vbf_categories, bin_width=rebin_width, label='All VBF SRs', error_graph=error_graph_vbf)
-    print boost_categories
+    if rebin_width == 10.:
+        rfile_error_all = ROOT.TFile('/Users/quentin/hleptons/analyses/SM_Run2_Rel20.7/paper_histograms/workspaces/31MayPaper10GeVWithMGvsSHshapeCombination_HIST.root')
+        error_graph_all = rfile_error_all.Get('Htt_yearAll_chanAll_catAll_regsig_selCBA/Error')
+        c = pr_plot(postfit_pr, all_categories, bin_width=rebin_width, error_graph=error_graph_all)
+
+        rfile_error_boost = ROOT.TFile('/Users/quentin/hleptons/analyses/SM_Run2_Rel20.7/paper_histograms/workspaces/31MayPaper10GeVWithMGvsSHshapeBoost_HIST.root')
+        error_graph_boost = rfile_error_boost.Get('Htt_yearAll_chanAll_catboost_regsig_selCBA/Error')
+        c1 = pr_plot(postfit_pr, boost_categories, bin_width=rebin_width, label='All Boosted SRs', error_graph=error_graph_boost)
+        
+        rfile_error_vbf = ROOT.TFile('/Users/quentin/hleptons/analyses/SM_Run2_Rel20.7/paper_histograms/workspaces/31MayPaper10GeVWithMGvsSHshapeVBF_HIST.root')
+        error_graph_vbf = rfile_error_vbf.Get('Htt_yearAll_chanAll_catvbf_regsig_selCBA/Error')
+        c2 = pr_plot(postfit_pr, vbf_categories, bin_width=rebin_width, label='All VBF SRs', error_graph=error_graph_vbf)
+
+    else:
+
+        c = pr_plot(postfit_pr, all_categories, bin_width=rebin_width)
+        c1 = pr_plot(postfit_pr, boost_categories, bin_width=rebin_width, label='All Boosted SRs')
+        c2 = pr_plot(postfit_pr, vbf_categories, bin_width=rebin_width, label='All VBF SRs')
